@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Instant;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -14,8 +13,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import io.opencensus.common.Timestamp;
 
 
 @Service
@@ -33,11 +30,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
   }
 
   @Override
-  public void save(MultipartFile file) {
+  public void save(MultipartFile file, String filename) {
     try {
-    	//Timestamp ts = Timestamp.from(Instant.now());
-    	Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename())); 
-    	//Files.copy(file.getInputStream(), this.root.resolve(ts+file.getContentType()));
+    	Files.copy(file.getInputStream(), this.root.resolve(filename));
     } catch (Exception e) {
       throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
     }
@@ -81,7 +76,7 @@ public <S extends FileInfo> S save(S entity) {
 
 @Override
 public <S extends FileInfo> Iterable<S> saveAll(Iterable<S> entities) {
-	// TODO Auto-generated method stub
+  // TODO Auto-generated method stub
 	return null;
 }
 
@@ -105,7 +100,7 @@ public Iterable<FileInfo> findAll() {
 
 @Override
 public Iterable<FileInfo> findAllById(Iterable<Long> ids) {
-	// TODO Auto-generated method stub
+  // TODO Auto-generated method stub
 	return null;
 }
 
@@ -123,19 +118,19 @@ public void deleteById(Long id) {
 
 @Override
 public void delete(FileInfo entity) {
-	// TODO Auto-generated method stub
+  // TODO Auto-generated method stub
 	
 }
 
 @Override
 public void deleteAllById(Iterable<? extends Long> ids) {
-	// TODO Auto-generated method stub
+  // TODO Auto-generated method stub
 	
 }
 
 @Override
 public void deleteAll(Iterable<? extends FileInfo> entities) {
-	// TODO Auto-generated method stub
+  // TODO Auto-generated method stub
 	
 }
 

@@ -1,7 +1,8 @@
 package com.federico_ioan.ProgettoIng.File;
 
-import java.time.Instant;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,38 +21,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import com.federico_ioan.ProgettoIng.File.FilesController;
-
-import io.opencensus.common.Timestamp;
-
-
 
 @Controller
 @CrossOrigin("http://localhost:8081")
 @RestController
 public class FilesController {
 
-	/*private final FilesStorageService fileRepository;
-	
-	FilesController(FilesStorageService repository){
-		fileRepository = repository; 
-	}*/
+  private final FileInfoRepository fileInfoRepository;
 	
   @Autowired
   FilesStorageService storageService;
-  
+
+  public FilesController(FileInfoRepository fileInfoRepository) {
+    this.fileInfoRepository = fileInfoRepository;
+  }
+
   @PostMapping("/files")
   public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
-  //public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id, @RequestParam("dateInsert")LocalDateTime dateInsert) {
- 
+
     String message = "";
     try {
-      storageService.save(file);
-      
-      //storageService.save()
-      //message = "Uploaded the file successfully: " + file.getOriginalFilename() + file.getName() + file.getSize() + id.intValue() + dateInsert.get(null);
-      //Timestamp ts = Timestamp.from(Instant.now());
-      message = "Uploaded the file successfully: " + file.getOriginalFilename() + "  File name: " + file.getName() +"  Content Typy:" + file.getContentType() + " Ora Attuale ";
+      LocalDateTime localDateTime  = LocalDateTime.now(ZoneId.of("GMT+01:00"));
+      String fileName = file.getOriginalFilename();
+      String stringToHash = fileName + localDateTime.toString();
+
+      // Hashing the filename
+      byte[] bytesOfMessage = stringToHash.getBytes("UTF-8");
+      MessageDigest md = MessageDigest.getInstance("MD5");
+      byte[] theMD5digest = md.digest(bytesOfMessage);
+
+      String newFileName = theMD5digest.toString() + "." + file.getOriginalFilename().split("\\.")[1];
+
+      storageService.save(file, newFileName);
+
+      // Save into the db
+      FileInfo fileInfo = new FileInfo(fileName, newFileName, localDateTime);
+      fileInfoRepository.save(fileInfo);
+
+
+      message = "Uploaded the file successfully: " + file.getOriginalFilename();
       return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     } catch (Exception e) {
       message = "Could not upload the file: " + file.getOriginalFilename() + "!";
@@ -63,10 +71,10 @@ public class FilesController {
   public ResponseEntity<List<FileInfo>> getListFiles() {
     List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
       String filename = path.getFileName().toString();
-      String url = MvcUriComponentsBuilder
-          .fromMethodName(FilesController.class, "getFile", path.getFileName().toString()).build().toString();
+      String url = MvcUriComponentsBuilder .fromMethodName(FilesController.class, "getFile",
+              path.getFileName().toString()).build().toString();
 
-      return new FileInfo(null, filename, url, null);
+      return new FileInfo(filename, url, null);
     }).collect(Collectors.toList());
 
     return ResponseEntity.status(HttpStatus.OK).body(fileInfos);

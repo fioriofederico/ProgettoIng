@@ -21,9 +21,8 @@ public class FileInfo {
 	  
 	  public FileInfo() {}
 
-	  public FileInfo(Long id, String name, String url, LocalDateTime dateInsert) {
+	  public FileInfo(String name, String url, LocalDateTime dateInsert) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.url = url;
 		this.dateInsert = dateInsert;
