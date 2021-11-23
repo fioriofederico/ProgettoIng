@@ -1,96 +1,72 @@
 package com.federico_ioan.ProgettoIng.Course;
 
-import java.time.LocalDateTime;
+import com.federico_ioan.ProgettoIng.CourseModule.CourseModule;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
 
 
 @Entity
+@Table(name = "Course")
 public class Course {
-	private @Id @GeneratedValue Long id;
-	private @Column(nullable = false) String name;
-	private @Column(nullable = false) Long userId;
+	@Id
+	@GeneratedValue
+	private Long id;
+
+	@Column(nullable = false)
+	private String name;
+
+	@Column(nullable = false)
+	private Long userId;
+
 	private String duration;
-	private @Column(columnDefinition = "TIMESTAMP") LocalDateTime dateInsert;
 
-	
+	@OneToMany(
+			mappedBy = "course",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private List<CourseModule> courseModules = new ArrayList<>();
 
-	public Long getId() {
-		return id;
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime dateInsert;
+
+	public Course() {}
+
+	public Course(String name, Long userId, String duration) {
+		this.name = name;
+		this.userId = userId;
+		this.duration = duration;
 	}
-
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
 
 	public String getName() {
 		return name;
 	}
 
-
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
 
 	public Long getUserId() {
 		return userId;
 	}
 
-
-
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-
 
 	public String getDuration() {
 		return duration;
 	}
 
-
-
 	public void setDuration(String duration) {
 		this.duration = duration;
 	}
 
-
-
-	public LocalDateTime getDateInsert() {
-		return dateInsert;
+	public void setCourseModules(List<CourseModule> courseModules) {
+		this.courseModules = courseModules;
 	}
-
-
-
-	public void setDateInsert(LocalDateTime dateInsert) {
-		this.dateInsert = dateInsert;
-	}
-
-
-
-	public Course() {}
-
-
-
-	public Course(Long id, String name, Long userId, String duration, LocalDateTime dateInsert) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.userId = userId;
-		this.duration = duration;
-		this.dateInsert = dateInsert;
-	}
-
-
-	
 }
