@@ -44,8 +44,8 @@ public class UserController {
 		if(userDto.getSurname()!= null) {
 			userToUpdate.setSurname(userDto.getSurname());
 		}
-		if(userDto.getRole()!= null) {
-			userToUpdate.setRole(userDto.getRole());
+		if(userDto.getRoles()!= null) {
+			userToUpdate.setRoles(userDto.getRoles());
 		}
 		return userRepository.save(userToUpdate);
 	}
