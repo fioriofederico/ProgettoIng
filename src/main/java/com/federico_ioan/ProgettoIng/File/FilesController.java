@@ -5,10 +5,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.google.api.client.util.NullValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
@@ -51,7 +50,7 @@ public class FilesController {
       byte[] digestedUrl = md.digest(bytesOfUrl);
 
       // Build the final url
-      String fileUrl = digestedUrl.toString() + "." + file.getOriginalFilename().split("\\.")[1];
+      String fileUrl = digestedUrl.toString().replaceAll("[^a-zA-Z0-9]", "");
 
       // Save file in the server
       storageService.save(file, fileUrl);
@@ -74,11 +73,11 @@ public class FilesController {
   @GetMapping("/files")
   public ResponseEntity<List<FileInfo>> getListFiles() {
     List<FileInfo> fileInfos = storageService.loadAll().map(path -> {   // TO DO: get FileInfo from db
-      String filename = path.getFileName().toString();
-      String url = MvcUriComponentsBuilder .fromMethodName(FilesController.class, "getFile",
+      List<FileInfo> fileInfoList = fileInfoRepository.findByUrl(path.getFileName().toString());
+      String url = MvcUriComponentsBuilder.fromMethodName(FilesController.class, "getFile",
               path.getFileName().toString()).build().toString();
-
-      return new FileInfo(filename, url, null);
+      LocalDateTime localDateTime  = LocalDateTime.now(ZoneId.of("GMT+01:00"));
+      return new FileInfo(fileInfoList.stream().findFirst().get().getName(), url, localDateTime);
     }).collect(Collectors.toList());
 
     return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
@@ -87,7 +86,8 @@ public class FilesController {
   @GetMapping("/files/{filename:.+}")
   public ResponseEntity<Resource> getFile(@PathVariable String filename) {
     Resource file = storageService.load(filename);
+    FileInfo fileInfo = fileInfoRepository.findByUrl(filename).stream().findFirst().get();
     return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileInfo.getName() + "\"").body(file);
   }
 }

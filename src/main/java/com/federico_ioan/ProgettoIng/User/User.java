@@ -1,21 +1,67 @@
 package com.federico_ioan.ProgettoIng.User;
 
-import java.time.LocalDateTime;
+import com.federico_ioan.ProgettoIng.Role.Role;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(	name = "users",
+		uniqueConstraints = {
+				@UniqueConstraint(columnNames = "username"),
+				@UniqueConstraint(columnNames = "email")
+		})
 public class User {
-	private @Id @GeneratedValue Long id;
-	private @Column(nullable = false) String name;
-	private @Column(nullable = false) String surname;
-	private @Column(nullable = false, unique=true) String email;
-	private @Column(nullable = false) String role;
-	private @Column(nullable = false) String password;
-	private @Column(columnDefinition = "TIMESTAMP") LocalDateTime dateInsert;
+	@Id @GeneratedValue
+	private Long id;
+
+	@NotBlank
+	private String name;
+
+	@NotBlank
+	private String surname;
+
+	@NotBlank
+	@Size(max = 20)
+	private String username;
+
+	@NotBlank
+	@Size(max = 250)
+	@Email
+	private String email;
+
+	@NotBlank
+	@Size(max = 120)
+	private String password;
+
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime dateInsert;
+
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime dateUpdate;
+
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(	name = "user_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
+	public User(){
+	}
+
+	public User(String name, String surname, String username, String email, String password) {
+		this.name = name;
+		this.surname = surname;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
 
 	public Long getId() {
 		return id;
@@ -41,20 +87,20 @@ public class User {
 		this.surname = surname;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
 	}
 
 	public String getPassword() {
@@ -65,26 +111,11 @@ public class User {
 		this.password = password;
 	}
 
-	public LocalDateTime getDateInsert() {
-		return dateInsert;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setDateInsert(LocalDateTime dateInsert) {
-		this.dateInsert = dateInsert;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
-
-	public User(){}
-
-	public User(Long id, String name, String surname, String email, String role, String password,
-			LocalDateTime dateInsert) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.role = role;
-		this.password = password;
-		this.dateInsert = dateInsert;
-	}
-	
 }
