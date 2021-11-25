@@ -13,7 +13,7 @@ public class CourseFeedback {
 	private @Id @GeneratedValue Long id;
 	private @Column(nullable = false) Long score;
 	private @Column(length = 4000) String description;
-	private @Column(nullable = false) Long userId;
+	private @Column(nullable = false) Long userId;	// TO DO: many to many relation
 	private @Column(nullable = false) Long courseId;
 	private @Column(columnDefinition = "TIMESTAMP") LocalDateTime dateInsert;
 

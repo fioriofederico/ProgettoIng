@@ -1,16 +1,15 @@
 package com.federico_ioan.ProgettoIng.Course;
 
 import com.federico_ioan.ProgettoIng.CourseModule.CourseModule;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 import javax.persistence.*;
 
 
 @Entity
-@Table(name = "Course")
+@Table(name = "courses")
 public class Course {
 	@Id
 	@GeneratedValue
@@ -20,19 +19,25 @@ public class Course {
 	private String name;
 
 	@Column(nullable = false)
-	private Long userId;
+	private Long userId;	// TO DO: one to many relation
+
+	// TO DO: add many to many relation for enrolled users
 
 	private String duration;
 
 	@OneToMany(
 			mappedBy = "course",
-			cascade = CascadeType.ALL,
-			orphanRemoval = true
+			fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL
+//			orphanRemoval = true
 	)
-	private List<CourseModule> courseModules = new ArrayList<>();
+	private Set<CourseModule> courseModules;
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime dateInsert;
+
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime dateUpdate;
 
 	public Course() {}
 
@@ -40,6 +45,10 @@ public class Course {
 		this.name = name;
 		this.userId = userId;
 		this.duration = duration;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getName() {
@@ -66,7 +75,19 @@ public class Course {
 		this.duration = duration;
 	}
 
-	public void setCourseModules(List<CourseModule> courseModules) {
+	public Set<CourseModule> getCourseModules() {
+		return courseModules;
+	}
+
+	public void setCourseModules(Set<CourseModule> courseModules) {
 		this.courseModules = courseModules;
+	}
+
+	public LocalDateTime getDateInsert() {
+		return dateInsert;
+	}
+
+	public LocalDateTime getDateUpdate() {
+		return dateUpdate;
 	}
 }

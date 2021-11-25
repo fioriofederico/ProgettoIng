@@ -3,6 +3,7 @@ package com.federico_ioan.ProgettoIng.Course;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/courses")
 public class CourseController {
 	
 	private final CourseRepository courseRepository;
@@ -11,22 +12,22 @@ public class CourseController {
 		courseRepository = repository;
 	}
 	
-	@GetMapping("/courses")
+	@GetMapping()
 	Iterable<Course> getCourses(){
 		return courseRepository.findAll();
 	}
 	
-	@GetMapping("/courses/{courseId}")
+	@GetMapping("/{courseId}")
 	Course getCourse(@PathVariable Long courseId){
 		return courseRepository.findById(courseId).orElseThrow();
 	}
 	
-	@PostMapping("/courses")
+	@PostMapping()
 	Course createCourse(@RequestBody Course newCourse) {
 		return courseRepository.save(newCourse);
 	}
 	
-	@PutMapping("/courses/{courseId}")
+	@PutMapping("/{courseId}")
 	Course updateCourse(@PathVariable Long courseId, @RequestBody Course courseDto) {
 		Course courseToUpdate = courseRepository.findById(courseId).orElseThrow();
 		if(courseDto.getName()!= null) {
@@ -41,7 +42,7 @@ public class CourseController {
 		return courseRepository.save(courseToUpdate);
 	}
 	
-	@DeleteMapping("/courses/{courseId}")
+	@DeleteMapping("/{courseId}")
 	Course deleteCourse(@PathVariable Long courseId){
 		Course course = courseRepository.findById(courseId).orElseThrow();
 		courseRepository.delete(course);

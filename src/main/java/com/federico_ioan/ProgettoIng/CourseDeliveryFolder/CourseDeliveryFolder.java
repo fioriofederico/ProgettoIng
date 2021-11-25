@@ -14,7 +14,7 @@ import javax.persistence.Id;
 public class CourseDeliveryFolder {
 	private @Id @GeneratedValue Long id;
 	private @Column(nullable = false) String name;
-	private @Column(nullable = false) Long courseId;
+	private @Column(nullable = false) Long courseId;	// TO DO: one to many relation
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
 	private @Column(columnDefinition = "TIMESTAMP") LocalDateTime dateInsert;

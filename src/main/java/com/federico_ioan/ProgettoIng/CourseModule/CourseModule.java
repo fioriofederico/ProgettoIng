@@ -1,36 +1,39 @@
 package com.federico_ioan.ProgettoIng.CourseModule;
 
 import com.federico_ioan.ProgettoIng.Course.Course;
-
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+
 @Entity
-@Table(name = "CourseModule")
+@Table(name = "courses_modules")
 public class CourseModule {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(nullable = false, updatable = false)
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
 	private String name;
 
-    @Column()
+	@Size(max = 256)
 	private String description;
 
-	@ManyToOne()
-	@JoinColumn(name = "course_id")
+	@ManyToOne(
+			fetch = FetchType.LAZY,
+			optional = false
+	)
+	@JoinColumn(name = "course_id", nullable = false)
 	private Course course;
 
     @Column(nullable = false)
 	private String url;
 
-    @Column(columnDefinition = "TIMESTAMP")
-	private LocalDateTime created_date;
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime dateInsert;
 
-    @Column(columnDefinition = "TIMESTAMP")
-	private LocalDateTime updated_date;
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime dateUpdate;
 
 	public CourseModule() {}
 
@@ -38,6 +41,10 @@ public class CourseModule {
 		this.name = name;
 		this.description = description;
 		this.url = url;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getName() {
@@ -56,6 +63,10 @@ public class CourseModule {
 		this.description = description;
 	}
 
+	public Course getCourse() {
+		return course;
+	}
+
 	public void setCourse(Course course) {
 		this.course = course;
 	}
@@ -66,5 +77,13 @@ public class CourseModule {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public LocalDateTime getDateInsert() {
+		return dateInsert;
+	}
+
+	public LocalDateTime getDateUpdate() {
+		return dateUpdate;
 	}
 }
