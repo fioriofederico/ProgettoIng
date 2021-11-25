@@ -1,6 +1,5 @@
 package com.federico_ioan.ProgettoIng.File;
 
-import java.io.File;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -45,9 +44,6 @@ public class FilesController {
     String urlToHash = fileName + Timestamp.valueOf(localDateTime);
 
     try {
-
-      //FileInfo fileInfo = new FileInfo(null, null, localDateTime);
-
       // Hash the url
       byte[] bytesOfUrl = urlToHash.getBytes("UTF-8");
       MessageDigest md = MessageDigest.getInstance("MD5");
@@ -74,7 +70,6 @@ public class FilesController {
 
   // TO DO: add delete file API function
 
-
   @GetMapping("/files")
   public ResponseEntity<List<FileInfo>> getListFiles() {
     List<FileInfo> fileInfos = storageService.loadAll().map(path -> {   // TO DO: get FileInfo from db
@@ -91,7 +86,7 @@ public class FilesController {
   @GetMapping("/files/{filename:.+}")
   public ResponseEntity<Resource> getFile(@PathVariable String filename) {
     Resource file = storageService.load(filename);
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=\"" + file.getFilename() + "\"").body(file);
   }
 }
