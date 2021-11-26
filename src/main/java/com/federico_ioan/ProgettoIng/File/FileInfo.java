@@ -9,54 +9,56 @@ import javax.persistence.Id;
 
 @Entity
 public class FileInfo {
-	  private @Id @GeneratedValue Long id;
-	  private @Column(nullable = false)String name;
-	  private @Column(nullable = false, unique=true)String url;
-	  private @Column(columnDefinition = "TIMESTAMP") LocalDateTime dateInsert;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-	 /* public FileInfo(String name, String url) {
-	    this.name = name;
-	    this.url = url;
-	  }*/
-	  
-	  public FileInfo() {}
+    @Column(nullable = false)
+    private String name;
 
-	  public FileInfo(String name, String url, LocalDateTime dateInsert) {
-		super();
-		this.name = name;
-		this.url = url;
-		this.dateInsert = dateInsert;
-	}
+    @Column(nullable = false, unique = true)
+    private String url;
 
-	public String getName() {
-	    return this.name;
-	  }
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime dateInsert;
 
-	  public void setName(String name) {
-	    this.name = name;
-	  }
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime dateUpdate;
 
-	  public String getUrl() {
-	    return this.url;
-	  }
+    public FileInfo() {
+    }
 
-	  public void setUrl(String url) {
-	    this.url = url;
-	  }
+    public FileInfo(String name, String url) {
+        super();
+        this.name = name;
+        this.url = url;
+    }
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public LocalDateTime getDateInsert() {
-		return dateInsert;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDateInsert(LocalDateTime dateInsert) {
-		this.dateInsert = dateInsert;
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public LocalDateTime getDateInsert() {
+        return dateInsert;
+    }
+
+	public LocalDateTime getDateUpdate() {
+		return dateUpdate;
 	}
-	}
+}

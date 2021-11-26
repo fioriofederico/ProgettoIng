@@ -1,12 +1,16 @@
 package com.federico_ioan.ProgettoIng.File;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.federico_ioan.ProgettoIng.CourseModule.CourseModule;
 import com.federico_ioan.ProgettoIng.Payload.Response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -20,9 +24,9 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.bind.annotation.GetMapping;
 
 
-@Controller
-@CrossOrigin("http://localhost:8081")
 @RestController
+@RequestMapping("/files")
+@CrossOrigin("http://localhost:8081")
 public class FilesController {
 
   private final FileInfoRepository fileInfoRepository;
@@ -34,7 +38,7 @@ public class FilesController {
     this.fileInfoRepository = fileInfoRepository;
   }
 
-  @PostMapping("/files")
+  @PostMapping()
   public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile file) {
 
     // Initilize the response message
@@ -46,7 +50,7 @@ public class FilesController {
 
     try {
       // Hash the url
-      byte[] bytesOfUrl = urlToHash.getBytes("UTF-8");
+      byte[] bytesOfUrl = urlToHash.getBytes(StandardCharsets.UTF_8);
       MessageDigest md = MessageDigest.getInstance("MD5");
       byte[] digestedUrl = md.digest(bytesOfUrl);
 
@@ -57,7 +61,7 @@ public class FilesController {
       storageService.save(file, fileUrl);
 
       // Save file info in the db
-      FileInfo fileInfo = new FileInfo(fileName, fileUrl, localDateTime);
+      FileInfo fileInfo = new FileInfo(fileName, fileUrl);
       fileInfoRepository.save(fileInfo);
 
       // Return response message
@@ -71,20 +75,20 @@ public class FilesController {
 
   // TO DO: add delete file API function
 
-  @GetMapping("/files")
-  public ResponseEntity<List<FileInfo>> getListFiles() {
-    List<FileInfo> fileInfos = storageService.loadAll().map(path -> {   // TO DO: get FileInfo from db
-      List<FileInfo> fileInfoList = fileInfoRepository.findByUrl(path.getFileName().toString());
-      String url = MvcUriComponentsBuilder.fromMethodName(FilesController.class, "getFile",
-              path.getFileName().toString()).build().toString();
-      LocalDateTime localDateTime  = LocalDateTime.now(ZoneId.of("GMT+01:00"));
-      return new FileInfo(fileInfoList.stream().findFirst().get().getName(), url, localDateTime);
-    }).collect(Collectors.toList());
-
+  @GetMapping()
+  public ResponseEntity<List<FileInfo>> getFileInfos() {
+//    List<FileInfo> fileInfos = storageService.loadAll().map(path -> {   // TO DO: get FileInfo from db
+//      List<FileInfo> fileInfoList = fileInfoRepository.findByUrl(path.getFileName().toString());
+//      String url = MvcUriComponentsBuilder.fromMethodName(FilesController.class, "getFile",
+//              path.getFileName().toString()).build().toString();
+//      LocalDateTime localDateTime  = LocalDateTime.now(ZoneId.of("GMT+01:00"));
+//      return new FileInfo(fileInfoList.stream().findFirst().get().getName(), url);
+//    }).collect(Collectors.toList());
+    List<FileInfo> fileInfos = (List<FileInfo>) fileInfoRepository.findAll();
     return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
   }
 
-  @GetMapping("/files/{filename:.+}")
+  @GetMapping("/{filename}")
   public ResponseEntity<Resource> getFile(@PathVariable String filename) {
     Resource file = storageService.load(filename);
     FileInfo fileInfo = fileInfoRepository.findByUrl(filename).stream().findFirst().get();
