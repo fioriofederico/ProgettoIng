@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.federico_ioan.ProgettoIng.Payload.Response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +35,7 @@ public class FilesController {
   }
 
   @PostMapping("/files")
-  public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile file) {
 
     // Initilize the response message
     String message = "";
@@ -61,10 +62,10 @@ public class FilesController {
 
       // Return response message
       message = "Uploaded the file successfully: " + fileName;
-      return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+      return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
     } catch (Exception e) {
       message = "Could not upload the file: " + fileName + "!";
-      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
     }
   }
 
