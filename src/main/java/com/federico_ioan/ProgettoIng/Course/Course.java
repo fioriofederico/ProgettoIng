@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 
 @Entity
@@ -15,10 +17,11 @@ public class Course {
 	@GeneratedValue
 	private Long id;
 
-	@Column(nullable = false)
+	@NotBlank
+	@Size(min = 3)
 	private String name;
 
-	@Column(nullable = false)
+	@NotBlank
 	private Long userId;	// TO DO: one to many relation
 
 	// TO DO: add many to many relation for enrolled users

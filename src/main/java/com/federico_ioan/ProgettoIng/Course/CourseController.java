@@ -8,9 +8,7 @@ public class CourseController {
 	
 	private final CourseRepository courseRepository;
 	
-	CourseController(CourseRepository repository){
-		courseRepository = repository;
-	}
+	CourseController(CourseRepository repository){courseRepository = repository;}
 	
 	@GetMapping()
 	Iterable<Course> getCourses(){
