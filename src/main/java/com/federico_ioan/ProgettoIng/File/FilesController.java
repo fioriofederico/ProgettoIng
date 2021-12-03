@@ -77,21 +77,14 @@ public class FilesController {
 
   @GetMapping()
   public ResponseEntity<List<FileInfo>> getFileInfos() {
-//    List<FileInfo> fileInfos = storageService.loadAll().map(path -> {   // TO DO: get FileInfo from db
-//      List<FileInfo> fileInfoList = fileInfoRepository.findByUrl(path.getFileName().toString());
-//      String url = MvcUriComponentsBuilder.fromMethodName(FilesController.class, "getFile",
-//              path.getFileName().toString()).build().toString();
-//      LocalDateTime localDateTime  = LocalDateTime.now(ZoneId.of("GMT+01:00"));
-//      return new FileInfo(fileInfoList.stream().findFirst().get().getName(), url);
-//    }).collect(Collectors.toList());
-    List<FileInfo> fileInfos = (List<FileInfo>) fileInfoRepository.findAll();
-    return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+    List<FileInfo> fileInfos = fileInfoRepository.findAll();
+    return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION).body(fileInfos);
   }
 
-  @GetMapping("/{filename}")
-  public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-    Resource file = storageService.load(filename);
-    FileInfo fileInfo = fileInfoRepository.findByUrl(filename).stream().findFirst().get();
+  @GetMapping("/{url}")
+  public ResponseEntity<Resource> getFile(@PathVariable String url) {
+    Resource file = storageService.load(url);
+    FileInfo fileInfo = fileInfoRepository.findFileInfoByUrl(url);
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileInfo.getName() + "\"").body(file);
   }

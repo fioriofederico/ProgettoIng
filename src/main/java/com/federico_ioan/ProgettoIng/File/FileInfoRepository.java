@@ -1,9 +1,8 @@
 package com.federico_ioan.ProgettoIng.File;
 
-import org.springframework.data.repository.CrudRepository;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface FileInfoRepository extends CrudRepository<FileInfo, Long> {
-    List<FileInfo> findByUrl(String Url);
+public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
+   FileInfo findFileInfoByUrl(String url);
 }
