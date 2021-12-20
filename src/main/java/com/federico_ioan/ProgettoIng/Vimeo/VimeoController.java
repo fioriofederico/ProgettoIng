@@ -31,6 +31,7 @@ public class VimeoController {
         //Rimuovo eventuale cartella dell'archiviazione video se già presente
         storageService.deleteAll();
         String message = "";
+        //Token per l'accesso alle api
         Vimeo vimeo = new Vimeo("33cf31f02fad348a5ff79f204c215ce7");
         //Quando procedo al savattaggio creo cartella la cartella e salvo il file al suo interno
         storageService.save(file, file.getOriginalFilename());
