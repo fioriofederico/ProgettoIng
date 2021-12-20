@@ -8,7 +8,7 @@ public interface VimeoStorageService {
 
 	public void save(MultipartFile file, String filename, String subDirectory);
 
-	  public void deleteAll(String subDirectory);
+	public void deleteAll(String subDirectory);
 
     <S extends Vimeo> S save(S entity);
 
