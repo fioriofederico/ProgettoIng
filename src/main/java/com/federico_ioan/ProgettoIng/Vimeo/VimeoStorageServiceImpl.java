@@ -26,18 +26,22 @@ public class VimeoStorageServiceImpl implements VimeoStorageService {
   }
 
   @Override
-  public void save(MultipartFile file, String filename) {
+  public void save(MultipartFile file, String filename, String subDirectory) {
     try {
-        init();
-    	Files.copy(file.getInputStream(), this.root.resolve(filename));
+        //init();
+        Path Folder = Files.createDirectory(Path.of(subDirectory));
+    	//Files.copy(file.getInputStream(), this.root.resolve(filename));
+        Files.copy(file.getInputStream(), Folder.resolve(filename));
     } catch (Exception e) {
       throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
     }
   }
 
   @Override
-  public void deleteAll() {
-    FileSystemUtils.deleteRecursively(root.toFile());
+  public void deleteAll(String subDirectory) {
+    Path subFolder = Paths.get(subDirectory);
+    FileSystemUtils.deleteRecursively(subFolder.toFile());
+    //FileSystemUtils.deleteRecursively(root.toFile());
   }
 
 

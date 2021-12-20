@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
 
 
 @RestController
@@ -20,7 +21,6 @@ import java.nio.file.Paths;
 
 public class VimeoController {
 
-    private Path root = Paths.get("uploadsVideo");
     @Autowired
     VimeoStorageService storageService;
 
@@ -28,24 +28,31 @@ public class VimeoController {
     @PostMapping("/upload")
     public ResponseEntity<MessageResponse> uploadVideo(@RequestParam("file") MultipartFile file) throws IOException, VimeoException, InterruptedException {
         // Initilize the response message
-        //Rimuovo eventuale cartella dell'archiviazione video se già presente
-        storageService.deleteAll();
         String message = "";
         //Token per l'accesso alle api
         Vimeo vimeo = new Vimeo("33cf31f02fad348a5ff79f204c215ce7");
+        //Genera Nome Folder Casuale
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
         //Quando procedo al savattaggio creo cartella la cartella e salvo il file al suo interno
-        storageService.save(file, file.getOriginalFilename());
-        //String videoEndPoint = vimeo.addVideo(new File( "/Users/federico/IdeaProjects/ProgettoIng/uploadsVideo/"+ file.getOriginalFilename()), true);
-        File path = new File(this.root.toFile().getAbsolutePath() +"/" + file.getOriginalFilename());
+        storageService.save(file, file.getOriginalFilename(), generatedString);
+        Path variabile = Paths.get(generatedString);
+        //File path = new File(this.root.toFile().getAbsolutePath() + "/" + generatedString + "/" + file.getOriginalFilename());
+        File path = new File(variabile.toFile().getAbsolutePath()  + "/" + file.getOriginalFilename());
         String videoEndPoint = vimeo.addVideo(path, true);
-        System.out.println(videoEndPoint);
         //Rimuovo cartella dell'archiviazione video
-        storageService.deleteAll();
+        storageService.deleteAll(generatedString);
         //get video info
         VimeoResponse info = vimeo.getVideoInfo(videoEndPoint);
         // Return response message
 
-        System.out.println(info);
         String name = "Name";
         String desc = "Description";
         String license = ""; //see Vimeo API Documentation
