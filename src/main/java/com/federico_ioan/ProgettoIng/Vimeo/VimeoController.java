@@ -34,13 +34,9 @@ public class VimeoController {
         //Genera Nome Folder Casuale
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
+        int targetStringLength = 40;
         Random random = new Random();
-
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+        String generatedString = random.ints(leftLimit, rightLimit + 1).limit(targetStringLength).collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
         //Quando procedo al savattaggio creo cartella la cartella e salvo il file al suo interno
         storageService.save(file, file.getOriginalFilename(), generatedString);
         Path variabile = Paths.get(generatedString);
