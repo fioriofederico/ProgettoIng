@@ -2,6 +2,7 @@ package com.federico_ioan.ProgettoIng;
 
 import javax.annotation.Resource;
 
+import com.federico_ioan.ProgettoIng.Vimeo.VimeoStorageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
