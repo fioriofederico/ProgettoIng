@@ -97,6 +97,11 @@
 			<artifactId>vimeo</artifactId>
 			<version>1.13</version>
 		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.argo</groupId>
+			<artifactId>argo</artifactId>
+			<version>6.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

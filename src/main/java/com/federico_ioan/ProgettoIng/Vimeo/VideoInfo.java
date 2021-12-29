@@ -1,4 +1,4 @@
-package com.federico_ioan.ProgettoIng.Video;
+package com.federico_ioan.ProgettoIng.Vimeo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
-public class Video {
+public class VideoInfo {
     @Id
     @GeneratedValue
     private Long id;
@@ -24,18 +24,18 @@ public class Video {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateUpdate;
 
-    public Video() {
+    public VideoInfo() {
     }
 
-    public Video(String name, String url) {
+    public VideoInfo(String name, String url) {
         super();
         this.name = name;
         this.url = url;
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return this.name;
@@ -57,7 +57,7 @@ public class Video {
         return dateInsert;
     }
 
-	public LocalDateTime getDateUpdate() {
-		return dateUpdate;
-	}
+    public LocalDateTime getDateUpdate() {
+        return dateUpdate;
+    }
 }

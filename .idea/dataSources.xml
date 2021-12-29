@@ -8,5 +8,14 @@
       <jdbc-url>jdbc:mariadb://serverfiorio.ddns.net:3306</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="ProgettoIng/Hibernate" uuid="69d3051b-85a1-41ab-975d-8240cc04e0bf">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://networkfiorio.ddns.net:3306/progetto2</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
