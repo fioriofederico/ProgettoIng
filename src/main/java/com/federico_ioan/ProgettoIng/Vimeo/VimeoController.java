@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Random;
 
 
@@ -55,10 +54,6 @@ public class VimeoController {
         //get video info
         VimeoResponse info = this.vimeo.getVideoInfo(videoEndPoint);
         String linkVideo = info.getJson().getString("link").toString();
-        HashMap<String, String> results = new HashMap<>();
-        results.put("name", file.getOriginalFilename().toString());
-        results.put("url", linkVideo);
-        System.out.println(results);
         VideoInfo videoInfo = new VideoInfo(file.getOriginalFilename(), linkVideo);
         videoInfoRepository.save(videoInfo);
         //vimeo.updateVideoMetadata(videoEndPoint, name, desc, license, privacyView, privacyEmbed, reviewLink);
