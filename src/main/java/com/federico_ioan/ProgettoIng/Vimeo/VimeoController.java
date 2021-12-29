@@ -61,18 +61,6 @@ public class VimeoController {
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
     }
 
-
-    /*
-    //edit video
-    String name = "Name";
-    String desc = "Description";
-    String license = ""; //see Vimeo API Documentation
-    String privacyView = "disable"; //see Vimeo API Documentation
-    String privacyEmbed = "whitelist"; //see Vimeo API Documentation
-    boolean reviewLink = false;
-    vimeo.updateVideoMetadata(videoEndPoint, name, desc, license, privacyView, privacyEmbed, reviewLink);
-    */
-
     @GetMapping()
     Iterable<VideoInfo> getVideos(){
         return videoInfoRepository.findAll();
