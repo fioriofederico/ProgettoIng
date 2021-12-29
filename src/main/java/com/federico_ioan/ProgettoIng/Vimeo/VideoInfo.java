@@ -15,8 +15,14 @@ public class VideoInfo {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false, columnDefinition="TEXT")
+    private String description;
+
     @Column(nullable = false, unique = true)
     private String url;
+
+    @Column(nullable = false, unique = true)
+    private String endPointVimeo;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateInsert;
@@ -27,10 +33,12 @@ public class VideoInfo {
     public VideoInfo() {
     }
 
-    public VideoInfo(String name, String url) {
+    public VideoInfo(String name, String url, String endPointVimeo, String description) {
         super();
         this.name = name;
         this.url = url;
+        this.endPointVimeo = endPointVimeo;
+        this.description = description;
     }
 
     public Long getId() {
@@ -51,6 +59,22 @@ public class VideoInfo {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getEndPointVimeo() {
+        return endPointVimeo;
+    }
+
+    public void setEndPointVimeo(String endPointVimeo) {
+        this.endPointVimeo = endPointVimeo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getDateInsert() {

@@ -2,6 +2,7 @@ package com.federico_ioan.ProgettoIng.Vimeo;
 
 import com.federico_ioan.ProgettoIng.Payload.Response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,8 @@ public class VimeoController {
     //Token per l'accesso alle api
     private Vimeo vimeo = new Vimeo("33cf31f02fad348a5ff79f204c215ce7");
 
-    @PostMapping("/upload")
-    public ResponseEntity<MessageResponse> uploadVideo(@RequestParam("file") MultipartFile file) throws IOException, VimeoException, InterruptedException {
+    @PostMapping()
+    public ResponseEntity<MessageResponse> uploadVideo(@RequestParam("file") MultipartFile file, @Param("description") String description) throws IOException, VimeoException, InterruptedException {
         // Initilize the response message
         String message = "";
         //Genera Nome Folder Casuale
@@ -54,12 +55,13 @@ public class VimeoController {
         //get video info
         VimeoResponse info = this.vimeo.getVideoInfo(videoEndPoint);
         String linkVideo = info.getJson().getString("link").toString();
-        VideoInfo videoInfo = new VideoInfo(file.getOriginalFilename(), linkVideo);
+        VideoInfo videoInfo = new VideoInfo(file.getOriginalFilename(), linkVideo, videoEndPoint, description);
         videoInfoRepository.save(videoInfo);
-        //vimeo.updateVideoMetadata(videoEndPoint, name, desc, license, privacyView, privacyEmbed, reviewLink);
         message = "Uploaded the file successfully: " + linkVideo;
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
     }
+
+
     /*
     //edit video
     String name = "Name";
@@ -69,12 +71,37 @@ public class VimeoController {
     String privacyEmbed = "whitelist"; //see Vimeo API Documentation
     boolean reviewLink = false;
     vimeo.updateVideoMetadata(videoEndPoint, name, desc, license, privacyView, privacyEmbed, reviewLink);
-
-    //add video privacy domain
-    vimeo.addVideoPrivacyDomain(videoEndPoint, "clickntap.com");
-
-    //delete video
-    vimeo.removeVideo(videoEndPoint);
     */
+
+    @GetMapping()
+    Iterable<VideoInfo> getVideos(){
+        return videoInfoRepository.findAll();
+    }
+
+    @GetMapping("/{videoId}")
+    VideoInfo getVideo(@PathVariable Long videoId){
+        return videoInfoRepository.findById(videoId).orElseThrow();
+    }
+
+    @PutMapping("/{videoId}")
+    VideoInfo updateCourse(@PathVariable Long videoId, @RequestBody VideoInfo videoInfoDto) throws IOException {
+        VideoInfo videoInfoToUpdate = videoInfoRepository.findById(videoId).orElseThrow();
+        if(videoInfoDto.getName()!= null) {
+            videoInfoToUpdate.setName(videoInfoDto.getName());
+        }if(videoInfoDto.getDescription()!= null){
+            videoInfoToUpdate.setDescription(videoInfoDto.getDescription());
+        }
+        return videoInfoRepository.save(videoInfoToUpdate);
+    }
+
+    @DeleteMapping("/{videoId}")
+    VideoInfo deleteVideo(@PathVariable Long videoId) throws IOException {
+        VideoInfo videoInfo = videoInfoRepository.findById(videoId).orElseThrow();
+        String endPoint = videoInfo.getEndPointVimeo().toString();
+        vimeo.removeVideo(endPoint);
+        videoInfoRepository.delete(videoInfo);
+        return videoInfo;
+    }
+
 }
 
