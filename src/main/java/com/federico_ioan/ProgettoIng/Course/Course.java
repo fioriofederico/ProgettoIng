@@ -1,13 +1,12 @@
 package com.federico_ioan.ProgettoIng.Course;
 
 import com.federico_ioan.ProgettoIng.CourseModule.CourseModule;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 
 @Entity
