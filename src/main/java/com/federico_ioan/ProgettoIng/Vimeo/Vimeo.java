@@ -174,12 +174,11 @@ public class Vimeo {
     params.put("redirect_url", "");
     params.put("upgrade_to_1080", upgradeTo1080 ? "true" : "false");
     VimeoResponse response = beginUploadVideo(params);
+    //System.out.println(response);
     if (response.getStatusCode() == 201) {
       uploadVideo(inputStream, response.getJson().getString("upload_link_secure"));
       response = endUploadVideo(response.getJson().getString("complete_uri"));
-      if (response.getStatusCode() == 201) {
-        return response.getJson().getString("Location");
-      }
+        return response.getJson().getString("location");
     }
     throw new VimeoException(new StringBuffer("HTTP Status Code: ").append(response.getStatusCode()).toString());
   }
