@@ -178,8 +178,10 @@ public class Vimeo {
     if (response.getStatusCode() == 201) {
       uploadVideo(inputStream, response.getJson().getString("upload_link_secure"));
       response = endUploadVideo(response.getJson().getString("complete_uri"));
+      if(response.getStatusCode() == 201) {
         return response.getJson().getString("location");
-    }
+      }
+   }
     throw new VimeoException(new StringBuffer("HTTP Status Code: ").append(response.getStatusCode()).toString());
   }
 
