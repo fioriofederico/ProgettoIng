@@ -1,6 +1,6 @@
 package com.federico_ioan.ProgettoIng.utils;
 
-import com.federico_ioan.ProgettoIng.service.UserDetailsImpl;
+import com.federico_ioan.ProgettoIng.model.dto.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

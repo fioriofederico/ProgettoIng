@@ -1,4 +1,4 @@
-package com.federico_ioan.ProgettoIng.service;
+package com.federico_ioan.ProgettoIng.model.dto;
 
 import com.federico_ioan.ProgettoIng.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -2,34 +2,35 @@ package com.federico_ioan.ProgettoIng.controller;
 
 import com.federico_ioan.ProgettoIng.repository.UserRepository;
 import com.federico_ioan.ProgettoIng.model.User;
+import com.federico_ioan.ProgettoIng.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserController {
 	
-	private final UserRepository userRepository;
-	
-	UserController(UserRepository repository){
-		userRepository = repository;
-	}
+
+	@Autowired
+	UserService userService;
+
 	
 	@GetMapping("/users")
-	Iterable<User> getUser(){
-		return userRepository.findAll();
+	public ResponseEntity<List<User>> getUser(){
+		return userService.getUser();
 	}
 	
 	@GetMapping("/users/{userId}")
-	User getUser(@PathVariable Long userId) {
-		return userRepository.findById(userId).orElseThrow();
+	public ResponseEntity<User> getUser(@PathVariable Long userId) {
+		return userService.getUser(userId);
 	}
 	
-	@PostMapping("/users")
-	User createUser(@RequestBody User newUser) {
-		return 	userRepository.save(newUser);
-	}
+
 	
 	@PutMapping("/users/{userId}")
-	User updateUser(@PathVariable Long userId, @RequestBody User userDto){
+	public User updateUser(@PathVariable Long userId, @RequestBody User userDto){
 		User userToUpdate = userRepository.findById(userId).orElseThrow();
 		if(userDto.getEmail()!= null) {
 			userToUpdate.setEmail(userDto.getEmail());
@@ -47,19 +48,13 @@ public class UserController {
 	}
 	//Aggiornamento Password Utente
 	@PutMapping("/users/newPassword/{userId}")
-	User updatePwd(@PathVariable Long userId, @RequestBody User userDto){
-		User userToUpdate = userRepository.findById(userId).orElseThrow();
-		if(userDto.getPassword()!= null) {
-			userToUpdate.setPassword(userDto.getPassword());
-		}
-		return userRepository.save(userToUpdate);
+	public User updatePwd(@PathVariable Long userId, @RequestBody User userDto){
+	 return userService.updatePwd(userId, userDto);
 	}
 	
 	@DeleteMapping("/users/{userId}")
-	User deleteUser(@PathVariable Long userId) {
-		User user = userRepository.findById(userId).orElseThrow();
-		userRepository.delete(user);
-		return user;
+	public User deleteUser(@PathVariable Long userId) {
+	 return userService.deleteUser(userId);
 	}
 
 }
