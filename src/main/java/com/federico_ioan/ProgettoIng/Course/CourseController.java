@@ -1,50 +1,73 @@
 package com.federico_ioan.ProgettoIng.Course;
 
+import com.federico_ioan.ProgettoIng.Payload.Response.ResponseHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/courses")
 public class CourseController {
-	
-	private final CourseRepository courseRepository;
-	
-	CourseController(CourseRepository repository){courseRepository = repository;}
-	
-	@GetMapping()
-	Iterable<Course> getCourses(){
-		return courseRepository.findAll();
-	}
-	
-	@GetMapping("/{courseId}")
-	Course getCourse(@PathVariable Long courseId){
-		return courseRepository.findById(courseId).orElseThrow();
-	}
-	
-	@PostMapping()
-	Course createCourse(@RequestBody Course newCourse) {
-		return courseRepository.save(newCourse);
-	}
-	
-	@PutMapping("/{courseId}")
-	Course updateCourse(@PathVariable Long courseId, @RequestBody Course courseDto) {
-		Course courseToUpdate = courseRepository.findById(courseId).orElseThrow();
-		if(courseDto.getName()!= null) {
-			courseToUpdate.setName(courseDto.getName());
+
+	@Autowired
+	private CourseServiceImpl courseService;
+
+	@GetMapping
+	public ResponseEntity<Object> getCourses() {
+		try {
+			List<Course> courses = courseService.findCourses();
+			return ResponseHandler.generateResponse("Successfully retrived data!", HttpStatus.OK, courses);
+		} catch (Exception e) {
+			return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
 		}
-		if(courseDto.getDuration()!= null) {
-			courseToUpdate.setDuration(courseDto.getDuration());
-		}
-		if(courseDto.getUserId()!= null) {
-			courseToUpdate.setUserId(courseDto.getUserId());
-		}
-		return courseRepository.save(courseToUpdate);
 	}
-	
-	@DeleteMapping("/{courseId}")
-	Course deleteCourse(@PathVariable Long courseId){
-		Course course = courseRepository.findById(courseId).orElseThrow();
-		courseRepository.delete(course);
-		return course;
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Object> getCourse(@PathVariable Long id) {
+		try {
+			Course course = courseService.findCourse(id);
+			return ResponseHandler.generateResponse("Successfully retrived data!", HttpStatus.OK, course);
+		} catch (Exception e) {
+			return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+		}
 	}
+
+	@PostMapping
+	public ResponseEntity<Object> createCourse(@Valid @RequestBody CourseDto course) {
+		System.out.println("ciao");
+		try {
+			//1 get
+			Course createdCourse = new Course()
+			return ResponseHandler.generateResponse("Successfully uploaded data!", HttpStatus.OK, createdCourse);
+		} catch (Exception e) {
+			return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+		}
+	}
+
+	@PutMapping
+	public ResponseEntity<Object> updateCourse(@RequestBody Course course) {
+		try {
+			Course updatedCourse = courseService.updateCourse(course);
+			return ResponseHandler.generateResponse("Successfully updated data!", HttpStatus.OK, updatedCourse);
+		} catch (Exception e) {
+			return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+		}
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> deleteCourse(@PathVariable Long id) {
+		try {
+			Course deletedCourse = courseService.deleteCourse(id);
+			return ResponseHandler.generateResponse("Successfully retrived data!", HttpStatus.OK, deletedCourse);
+		} catch (Exception e) {
+			return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+		}
+	}
+
+
 	
 }
