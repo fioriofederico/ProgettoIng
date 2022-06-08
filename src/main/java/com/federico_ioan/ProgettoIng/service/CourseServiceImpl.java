@@ -1,7 +1,6 @@
 package com.federico_ioan.ProgettoIng.service;
-
-import com.federico_ioan.ProgettoIng.elperDaSostituire.CourseHelper;
 import com.federico_ioan.ProgettoIng.model.Course;
+import com.federico_ioan.ProgettoIng.repository.CourseRepository;
 import com.federico_ioan.ProgettoIng.service.IService.CourseService;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,33 +12,46 @@ import java.util.Objects;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    @Autowired
-    CourseHelper courseHelper;
 
+    @Autowired
+    private CourseRepository courseRepository;
     public List<Course> findCourses() {
-        return courseHelper.findCourses();
+        return courseRepository.findAll();
     }
 
     public Course findCourse(Long id) {
-        return courseHelper.findCourse(id);
+        try {
+            return courseRepository.findById(id).orElseThrow(Exception::new);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Course createCourse(Course course) {
-        Preconditions.checkArgument(!Objects.isNull(course.getName()));
-        Preconditions.checkArgument(!Objects.isNull(course.getDuration()));
-        Preconditions.checkArgument(!Objects.isNull(course.getOwner()));
-        return courseHelper.createCourse(course);
+        if (course.getName() != null)
+            return courseRepository.save(course);
+        else
+            return null;
     }
 
     public Course updateCourse(Course course) {
-        Preconditions.checkArgument(!Objects.isNull(course.getId()));
-        Preconditions.checkArgument(!Objects.isNull(course.getName()));
-        Preconditions.checkArgument(!Objects.isNull(course.getDuration()));
-        return courseHelper.updateCourse(course);
+        return courseRepository.save(
+                new Course(course.getId(),
+                        course.getName(),
+                        course.getDuration(),
+                        course.getOwner(),
+                        course.getDateInsert(),
+                        course.getDateUpdate())
+        );
     }
 
     public Course deleteCourse(Long id) {
         Preconditions.checkArgument(!Objects.isNull(id));
-        return courseHelper.deleteCourse(id);
+        if(courseRepository.existsById(id)) {
+            Course courseToDelete = courseRepository.findById(id).get();
+            courseRepository.delete(courseToDelete);
+            return courseToDelete;
+        }
+        return null;
     }
 }

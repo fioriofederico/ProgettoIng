@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 
+import com.federico_ioan.ProgettoIng.service.FileService;
 import com.federico_ioan.ProgettoIng.service.IService.FilesStorageService;
 import com.federico_ioan.ProgettoIng.model.dto.MessageResponse;
 import com.federico_ioan.ProgettoIng.model.FileInfo;
@@ -28,69 +29,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 @CrossOrigin("http://localhost:8081")
 public class FilesController {
 
-  private final FileInfoRepository fileInfoRepository;
-
-  @Value("${federico_ioan.app.BackEndUrl}")
-  private String BackEndUrl;
-
   @Autowired
-  FilesStorageService storageService;
+  private FileService fileService;
 
-  public FilesController(FileInfoRepository fileInfoRepository) {
-    this.fileInfoRepository = fileInfoRepository;
-  }
 
   @PostMapping()
   public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile file) {
-
-    // Initilize the response message
-    String message = "";
-    LocalDateTime localDateTime  = LocalDateTime.now(ZoneId.of("GMT+01:00"));
-    String fileName = file.getOriginalFilename();
-    // Create a url to hash
-    String urlToHash = fileName + Timestamp.valueOf(localDateTime);
-
-    try {
-      // Hash the url
-      byte[] bytesOfUrl = urlToHash.getBytes(StandardCharsets.UTF_8);
-      MessageDigest md = MessageDigest.getInstance("MD5");
-      byte[] digestedUrl = md.digest(bytesOfUrl);
-
-      // Build the final url
-      String fileUrl = digestedUrl.toString().replaceAll("[^a-zA-Z0-9]", "");
-
-      // Save file in the server
-      storageService.save(file, fileUrl);
-
-      // Save file info in the db
-      FileInfo fileInfo = new FileInfo(fileName, fileUrl);
-      fileInfoRepository.save(fileInfo);
-
-      // Return response message
-      message = "Uploaded the file successfully: " + fileName;
-      return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
-    } catch (Exception e) {
-      message = "Could not upload the file: " + fileName + "!";
-      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
-    }
+    return fileService.uploadFile(file);
   }
 
-  // TO DO: add delete file API function
+  // TODO: add delete file API function
 
   @GetMapping()
   public ResponseEntity<List<FileInfo>> getFileInfos() {
-    List<FileInfo> fileInfos = fileInfoRepository.findAll();
-    fileInfos.forEach( (fileInfo -> {
-      fileInfo.setUrl(this.BackEndUrl + "/files/" + fileInfo.getUrl());
-    }));
-    return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION).body(fileInfos);
+   return fileService.getFileInfos();
   }
 
   @GetMapping("/{url}")
   public ResponseEntity<Resource> getFile(@PathVariable String url) {
-    Resource file = storageService.load(url);
-    FileInfo fileInfo = fileInfoRepository.findFileInfoByUrl(url);
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileInfo.getName() + "\"").body(file);
+   return fileService.getFile(url);
   }
 }
