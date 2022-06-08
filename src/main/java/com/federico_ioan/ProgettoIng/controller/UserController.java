@@ -28,23 +28,9 @@ public class UserController {
 	}
 	
 
-	
 	@PutMapping("/users/{userId}")
-	public User updateUser(@PathVariable Long userId, @RequestBody User userDto){
-		User userToUpdate = userRepository.findById(userId).orElseThrow();
-		if(userDto.getEmail()!= null) {
-			userToUpdate.setEmail(userDto.getEmail());
-		}
-		if(userDto.getName()!= null) {
-			userToUpdate.setName(userDto.getName());
-		}
-		if(userDto.getSurname()!= null) {
-			userToUpdate.setSurname(userDto.getSurname());
-		}
-		if(userDto.getRoles()!= null) {
-			userToUpdate.setRoles(userDto.getRoles());
-		}
-		return userRepository.save(userToUpdate);
+	public User updateUser(@PathVariable Long userId, @RequestBody User user){
+		return userService.updateUser(userId, user);
 	}
 	//Aggiornamento Password Utente
 	@PutMapping("/users/newPassword/{userId}")

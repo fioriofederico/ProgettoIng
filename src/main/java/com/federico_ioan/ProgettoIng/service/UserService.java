@@ -29,6 +29,22 @@ public class UserService {
         }
     }
 
+    public User updateUser(Long userId, User user){
+        User userToUpdate = userRepository.findById(userId).orElseThrow();
+        if(user.getEmail()!= null) {
+            userToUpdate.setEmail(user.getEmail());
+        }
+        if(user.getName()!= null) {
+            userToUpdate.setName(user.getName());
+        }
+        if(user.getSurname()!= null) {
+            userToUpdate.setSurname(user.getSurname());
+        }
+        if(user.getRoles()!= null) {
+            userToUpdate.setRoles(user.getRoles());
+        }
+        return userRepository.save(userToUpdate);
+    }
 
     public User updatePwd(@PathVariable Long userId, @RequestBody User userDto){
         User userToUpdate = userRepository.findById(userId).orElseThrow();
