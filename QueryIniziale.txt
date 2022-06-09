@@ -1,3 +1,10 @@
-INSERT INTO roles(name) VALUES('ROLE_USER');
-INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
-INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+INSERT INTO `roles`(`id`, `name`) VALUES (1, 'ADMIN');
+INSERT INTO `roles`(`id`, `name`) VALUES (2, 'TUTOR');
+INSERT INTO `roles`(`id`, `name`) VALUES (3, 'STUDENT');
+
+INSERT INTO `users` (`id`, `date_insert`, `date_update`, `email`, `name`, `password`, `surname`, `username`) VALUES
+(2, '2022-06-04 18:54:59', '2022-06-04 18:54:59', 'ioan.corrias@libero.it', 'Ioan', '$2a$10$tNOiycWfxrzny/h5y576Ru6SZSHuKN80AfGikFaYLJ49.NaAiyhI2', 'Corrias', 'ioan');
+
+INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
+(2, 3);
+
