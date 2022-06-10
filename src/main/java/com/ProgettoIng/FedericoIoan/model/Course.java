@@ -1,5 +1,6 @@
 package com.ProgettoIng.FedericoIoan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,9 +27,10 @@ public class Course {
 
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
+	@JsonIgnore
 	private User owner;
 
-	// TO DO: enrolled students
+	// TODO: enrolled students
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime dateInsert;

@@ -8,9 +8,12 @@ import com.ProgettoIng.FedericoIoan.repository.CourseRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.CourseModuleService;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+@Service
 public class CourseModuleServiceImpl implements CourseModuleService {
 
     @Autowired
@@ -36,8 +39,14 @@ public class CourseModuleServiceImpl implements CourseModuleService {
         }
     }
 
-    public List<CourseModule> findCourseModules() {
-        return courseModuleRepository.findAll();
+    public List<CourseModule> findCourseModules(Long courseId) {
+        try {
+            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
+            return courseModuleRepository.findCourseModulesByCourse(course);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public CourseModule findCourseModule(Long id) {
@@ -53,11 +62,14 @@ public class CourseModuleServiceImpl implements CourseModuleService {
         if (!courseModuleRepository.existsById(id))
             throw new RuntimeException("CourseModule with id " + id + " does not exist");
 
-        return courseModuleRepository.save(
-                new CourseModule(
-                        courseModule.getName(),
-                        courseModule.getDescription())
-        );
+        // Get course module to update
+        CourseModule courseModuleToUpdate = courseModuleRepository.findById(id).get();
+
+        // Update course module
+        courseModuleToUpdate.setName(courseModule.getName());
+        courseModuleToUpdate.setDescription(courseModule.getDescription());
+
+        return courseModuleRepository.save(courseModuleToUpdate);
     }
 
     public CourseModule deleteCourseModule(Long id) {

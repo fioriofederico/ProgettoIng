@@ -1,22 +1,17 @@
 package com.ProgettoIng.FedericoIoan.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "course_modules")
-public class CourseModule {
+public class VideoDetails {
 
     @Id
     @GeneratedValue
@@ -26,19 +21,17 @@ public class CourseModule {
 
     private String description;
 
+    private String url;
+
+    private String endPointVimeo;
+
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    @JsonIgnore
-    private Course course;
+    @JoinColumn(name = "course_module_id")
+    private CourseModule courseModule;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateInsert;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateUpdate;
-
-    public CourseModule(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 }

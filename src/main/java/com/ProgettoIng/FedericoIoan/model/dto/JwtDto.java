@@ -4,8 +4,8 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
-public class JwtResponse {
+
+public class JwtDto {
 
 	private String token;
 	private String type = "Bearer";
@@ -14,7 +14,7 @@ public class JwtResponse {
 	private String email;
 	private List<String> roles;
 
-    public JwtResponse(String jwt, Long id, String username, String email, List<String> roles) {
+    public JwtDto(String jwt, Long id, String username, String email, List<String> roles) {
 		this.token = jwt;
 		this.id = id;
 		this.username = username;

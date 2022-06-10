@@ -13,9 +13,6 @@ public class CourseModuleDto {
     @NotNull
     private String description;
 
-    // Url is set after the course module is created with the upload API
-//    private String url;
-
     @NotNull
     private Long courseId;
 }

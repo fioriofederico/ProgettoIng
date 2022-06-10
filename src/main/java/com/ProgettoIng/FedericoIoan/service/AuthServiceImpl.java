@@ -3,21 +3,22 @@ package com.ProgettoIng.FedericoIoan.service;
 import com.ProgettoIng.FedericoIoan.model.ERole;
 import com.ProgettoIng.FedericoIoan.model.Role;
 import com.ProgettoIng.FedericoIoan.model.User;
-import com.ProgettoIng.FedericoIoan.model.dto.JwtResponse;
+import com.ProgettoIng.FedericoIoan.model.dto.JwtDto;
 import com.ProgettoIng.FedericoIoan.model.dto.UserDetailsImpl;
 import com.ProgettoIng.FedericoIoan.model.dto.UserLoginDto;
 import com.ProgettoIng.FedericoIoan.model.dto.UserRegistrationDto;
 import com.ProgettoIng.FedericoIoan.repository.RoleRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
+import com.ProgettoIng.FedericoIoan.service.IService.AuthService;
 import com.ProgettoIng.FedericoIoan.utils.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,20 +27,24 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     RoleRepository roleRepository;
+
     @Autowired
     PasswordEncoder encoder;
+
     @Autowired
     JwtUtils jwtUtils;
 
-    public ResponseEntity<?> authenticateUser(UserLoginDto loginRequest) {
+    public JwtDto authenticateUser(UserLoginDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -51,22 +56,18 @@ public class AuthService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+        return new JwtDto(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles);
     }
 
-    public ResponseEntity<?> registerUser(UserRegistrationDto signUpRequest) {
+    public User registerUser(UserRegistrationDto signUpRequest) {
 
         // Check if username already exists
         if (userRepository.existsByUsername(signUpRequest.getUsername()))
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
+            throw new RuntimeException("Username already exists");
 
         // Check if email already exists
         if (userRepository.existsByEmail(signUpRequest.getEmail()))
-            return ResponseEntity.badRequest().body("Error: Email is already in use!");
+            throw new RuntimeException("Email already exists");
 
         // Create new user's account
         User user = new User(signUpRequest.getName(),
@@ -79,7 +80,7 @@ public class AuthService {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null)
-            return ResponseEntity.badRequest().body("Error: Roles field is missing!");
+            throw new RuntimeException("User must have at least one role");
 
         // Check if roles are valid
         strRoles.forEach(role -> {
@@ -96,20 +97,20 @@ public class AuthService {
                     roles.add(modRole);
 
                     break;
-                    case "student":
+                case "student":
                     Role userRole = roleRepository.findByName(ERole.STUDENT)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     roles.add(userRole);
 
                     break;
                 default:
-                   throw new RuntimeException("Error: Role is not valid.");
+                    throw new RuntimeException("Error: Role is not valid.");
             }
         });
 
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok("User registered successfully!");
+        return user;
     }
 }
