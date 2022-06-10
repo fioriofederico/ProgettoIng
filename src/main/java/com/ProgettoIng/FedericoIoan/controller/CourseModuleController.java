@@ -20,9 +20,6 @@ public class CourseModuleController {
     @Autowired
     private CourseModuleServiceImpl courseModuleService;
 
-    @Autowired
-    private VideoDetailsServiceImpl videoDetailsService;
-
     @PostMapping
     public ResponseEntity<CourseModule> createCourseModule(@Valid @RequestBody CourseModuleDto courseModule) {
         CourseModule createdCourseModule = courseModuleService.createCourseModule(courseModule);
@@ -53,19 +50,4 @@ public class CourseModuleController {
         CourseModule deletedCourseModule = courseModuleService.deleteCourseModule(id);
         return ResponseEntity.ok(deletedCourseModule);
     }
-
-    // Upload video to course module
-    @PostMapping("/{id}/upload_video")
-    public ResponseEntity<?> uploadVideo(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        VideoDetails videoDetails = videoDetailsService.uploadVideo(id, file);
-        return ResponseEntity.ok(videoDetails);
-    }
-
-    // Delete video from course module
-    @DeleteMapping("/{id}/delete_video")
-    public ResponseEntity<?> deleteVideo(@PathVariable Long id) {
-        VideoDetails videoDetails = videoDetailsService.deleteVideo(id);
-        return ResponseEntity.ok(videoDetails);
-    }
-
 }

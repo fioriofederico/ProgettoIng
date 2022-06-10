@@ -1,5 +1,6 @@
 package com.ProgettoIng.FedericoIoan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class VideoDetails {
 
     @ManyToOne
     @JoinColumn(name = "course_module_id")
+    @JsonIgnore
     private CourseModule courseModule;
 
     @Column(columnDefinition = "TIMESTAMP")

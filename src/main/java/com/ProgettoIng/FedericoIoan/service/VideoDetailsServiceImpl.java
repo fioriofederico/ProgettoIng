@@ -12,6 +12,7 @@ import com.clickntap.vimeo.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 @Service
@@ -33,7 +34,7 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
     public VideoDetails uploadVideo(Long courseModuleId, MultipartFile file) {
 
         // Check if course module exists
-        if (courseModuleRepository.existsById(courseModuleId))
+        if (!courseModuleRepository.existsById(courseModuleId))
             throw new IllegalArgumentException("Course module not found");
 
         // Check if file is not empty
@@ -47,6 +48,9 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
             // Upload video to Vimeo
             String videoEndPoint = vimeo.addVideo(video, true);
 
+            // Delete video from local storage
+            vimeoStorageService.deleteAll(subDirectory);
+
             // Get video info from Vimeo
             VimeoResponse videoInfo = vimeo.getVideoInfo(videoEndPoint);
 
@@ -56,6 +60,7 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
             String license = ""; //see Vimeo API Documentation
             String privacyView = "disable"; //see Vimeo API Documentation
             String privacyEmbed = "whitelist"; //see Vimeo API Documentation
+            // TODO: fix metadata
             vimeo.updateVideoMetadata(videoEndPoint, name, description, license, privacyView, privacyEmbed, false);
 
             // Create VideoDetails object
@@ -81,6 +86,19 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
         vimeoStorageService.deleteAll(subDirectory);
 
         return null;
+    }
+
+    public List<VideoDetails> findVideos(Long courseModuleId) {
+        if(!courseModuleRepository.existsById(courseModuleId))
+            throw new IllegalArgumentException("Course module not found");
+
+        CourseModule courseModule = courseModuleRepository.findById(courseModuleId).get();
+
+        return videoDetailsRepository.findByCourseModule(courseModule);
+    }
+
+    public VideoDetails findVideo(Long id) {
+        return videoDetailsRepository.findById(id).get();
     }
 
     public VideoDetails deleteVideo(Long id) {

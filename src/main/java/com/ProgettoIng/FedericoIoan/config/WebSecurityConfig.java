@@ -58,7 +58,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests().antMatchers("/auth/**").permitAll()
 			.antMatchers("/files/**").permitAll()		// TODO: remove and optimize authorized request
 			.antMatchers("/test/**").permitAll()
-			.anyRequest().authenticated();
+				.anyRequest().permitAll();
+//			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
