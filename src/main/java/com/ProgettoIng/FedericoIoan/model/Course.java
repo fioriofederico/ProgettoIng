@@ -1,5 +1,6 @@
 package com.ProgettoIng.FedericoIoan.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -30,7 +33,12 @@ public class Course {
 	@JsonIgnore
 	private User owner;
 
-	// TODO: enrolled students
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(	name = "enrolled_users",
+			joinColumns = @JoinColumn(name = "course_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JsonBackReference(value = "enrolledUsers")
+	private Set<User> enrolledUsers = new HashSet<>();
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime dateInsert;

@@ -47,28 +47,53 @@ public class CourseServiceImpl implements CourseService {
 
             return courseRepository.save(courseToCreate);
         } catch (Exception e) {
-        throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
-    public Course updateCourse(Course course) {
-        return courseRepository.save(
-                new Course(course.getId(),
-                        course.getName(),
-                        course.getDuration(),
-                        course.getOwner(),
-                        course.getDateInsert(),
-                        course.getDateUpdate())
-        );
+    public Course updateCourse(Long id, CourseDto course) {
+        // Check if the course exists
+        if (courseRepository.existsById(id))
+            throw new RuntimeException("Course not found");
+
+        // Get course to update
+        Course courseToUpdate = courseRepository.findById(id).get();
+
+        // Update course
+        courseToUpdate.setName(course.getName());
+        courseToUpdate.setDuration(course.getDuration());
+
+        return courseRepository.save(courseToUpdate);
     }
 
     public Course deleteCourse(Long id) {
         Preconditions.checkArgument(!Objects.isNull(id));
-        if(courseRepository.existsById(id)) {
+        if (courseRepository.existsById(id)) {
             Course courseToDelete = courseRepository.findById(id).get();
             courseRepository.delete(courseToDelete);
             return courseToDelete;
         }
         return null;
+    }
+
+    public User enrollUser(Long courseId, Long userId) {
+
+        if (!courseRepository.existsById(courseId))
+            throw new RuntimeException("Course not found");
+
+        if (!userRepository.existsById(userId))
+            throw new RuntimeException("User not found");
+
+        Course course = courseRepository.findById(courseId).get();
+        User user = userRepository.findById(userId).get();
+
+//        course.getEnrolledUsers().add(user);
+        user.getAttendedCourses().add(course);
+
+//        courseRepository.save(course);
+        userRepository.save(user);
+
+        return user;
+
     }
 }
