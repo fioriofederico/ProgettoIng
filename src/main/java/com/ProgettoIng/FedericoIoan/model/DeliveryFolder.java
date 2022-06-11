@@ -1,5 +1,6 @@
 package com.ProgettoIng.FedericoIoan.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "course_modules")
-public class CourseModule {
+@Table(name = "delivery_folders")
+public class DeliveryFolder {
 
     @Id
     @GeneratedValue
@@ -23,11 +24,12 @@ public class CourseModule {
 
     private String name;
 
-    private String description;
+    private LocalDateTime startDeliveryTime;
+
+    private LocalDateTime endDeliveryTime;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
-    @JsonIgnore
     private Course course;
 
     @Column(columnDefinition = "TIMESTAMP")
@@ -35,9 +37,4 @@ public class CourseModule {
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateUpdate;
-
-    public CourseModule(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 }
