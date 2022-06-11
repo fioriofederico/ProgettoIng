@@ -30,6 +30,7 @@ public class DeliveryFolder {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonIgnore
     private Course course;
 
     @Column(columnDefinition = "TIMESTAMP")
