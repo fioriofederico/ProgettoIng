@@ -20,7 +20,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     private AttachmentRepository attachmentRepository;
 
     @Autowired
-    private StorageService storageService;
+    private StorageServiceImpl storageService;
 
     @Autowired
     private CourseModuleRepository courseModuleRepository;
@@ -47,7 +47,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         // Get all module attachments
         List<Attachment> attachments = attachmentRepository.findAllByCourseModule(courseModule);
 
-        //If code already exists in module, add a number to the end
+        //If code already exists in module throw exception
         for (Attachment a : attachments) {
             if (a.getCode().equals(code))
                 throw new RuntimeException("This file already exists");
