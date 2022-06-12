@@ -17,33 +17,53 @@ public class DeliveryFolderController {
     private DeliveryFolderServiceImpl deliveryFolderService;
 
     @PostMapping
-    public ResponseEntity<DeliveryFolder> createDeliveryFolder(@RequestBody DeliveryFolderDto deliveryFolderDto) {
-        DeliveryFolder createdDeliveryFolder =deliveryFolderService.createDeliveryFolder(deliveryFolderDto);
-        return ResponseEntity.ok(createdDeliveryFolder);
+    public ResponseEntity<?> createDeliveryFolder(@RequestBody DeliveryFolderDto deliveryFolderDto) {
+        try {
+            DeliveryFolder createdDeliveryFolder =deliveryFolderService.createDeliveryFolder(deliveryFolderDto);
+            return ResponseEntity.ok(createdDeliveryFolder);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<DeliveryFolder>> getDeliveryFolders(@PathVariable Long courseId) {
-        List<DeliveryFolder> deliveryFolders = deliveryFolderService.findDeliveryFolders(courseId);
-        return ResponseEntity.ok(deliveryFolders);
+    public ResponseEntity<?> getDeliveryFolders(@PathVariable Long courseId) {
+        try {
+            List<DeliveryFolder> deliveryFolders = deliveryFolderService.findDeliveryFolders(courseId);
+            return ResponseEntity.ok(deliveryFolders);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DeliveryFolder> getDeliveryFolder(@PathVariable Long id) {
-        DeliveryFolder deliveryFolder = deliveryFolderService.findDeliveryFolder(id);
-        return ResponseEntity.ok(deliveryFolder);
+    public ResponseEntity<?> getDeliveryFolder(@PathVariable Long id) {
+        try {
+            DeliveryFolder deliveryFolder = deliveryFolderService.findDeliveryFolder(id);
+            return ResponseEntity.ok(deliveryFolder);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DeliveryFolder> updateDeliveryFolder(@PathVariable Long id,
+    public ResponseEntity<?> updateDeliveryFolder(@PathVariable Long id,
                                                                @RequestBody DeliveryFolderDto deliveryFolderDto) {
-        DeliveryFolder updatedDeliveryFolder = deliveryFolderService.updateDeliveryFolder(id, deliveryFolderDto);
-        return ResponseEntity.ok(updatedDeliveryFolder);
+        try  {
+            DeliveryFolder updatedDeliveryFolder = deliveryFolderService.updateDeliveryFolder(id, deliveryFolderDto);
+            return ResponseEntity.ok(updatedDeliveryFolder);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeliveryFolder> deleteDeliveryFolder(@PathVariable Long id) {
-        DeliveryFolder deletedDeliveryFolder = deliveryFolderService.deleteDeliveryFolder(id);
-        return ResponseEntity.ok(deletedDeliveryFolder);
+    public ResponseEntity<?> deleteDeliveryFolder(@PathVariable Long id) {
+        try {
+            DeliveryFolder deletedDeliveryFolder = deliveryFolderService.deleteDeliveryFolder(id);
+            return ResponseEntity.ok(deletedDeliveryFolder);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -21,33 +21,53 @@ public class CourseModuleController {
     private CourseModuleServiceImpl courseModuleService;
 
     @PostMapping
-    public ResponseEntity<CourseModule> createCourseModule(@Valid @RequestBody CourseModuleDto courseModule) {
-        CourseModule createdCourseModule = courseModuleService.createCourseModule(courseModule);
-        return ResponseEntity.ok(createdCourseModule);
+    public ResponseEntity<?> createCourseModule(@Valid @RequestBody CourseModuleDto courseModule) {
+        try {
+            CourseModule createdCourseModule = courseModuleService.createCourseModule(courseModule);
+            return ResponseEntity.ok(createdCourseModule);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseModule>> getCourseModules(@PathVariable Long courseId) {
-        List<CourseModule> courseModules = courseModuleService.findCourseModules(courseId);
-        return ResponseEntity.ok(courseModules);
+    public ResponseEntity<?> getCourseModules(@PathVariable Long courseId) {
+        try {
+            List<CourseModule> courseModules = courseModuleService.findCourseModules(courseId);
+            return ResponseEntity.ok(courseModules);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseModule> getCourseModule(@PathVariable Long id) {
-        CourseModule courseModule = courseModuleService.findCourseModule(id);
-        return ResponseEntity.ok(courseModule);
+    public ResponseEntity<?> getCourseModule(@PathVariable Long id) {
+        try {
+            CourseModule courseModule = courseModuleService.findCourseModule(id);
+            return ResponseEntity.ok(courseModule);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseModule> updateCourseModule(@PathVariable Long id,
+    public ResponseEntity<?> updateCourseModule(@PathVariable Long id,
                                                            @Valid @RequestBody CourseModuleDto courseModule) {
-        CourseModule updatedCourseModule = courseModuleService.updateCourseModule(id, courseModule);
-        return ResponseEntity.ok(updatedCourseModule);
+        try {
+            CourseModule updatedCourseModule = courseModuleService.updateCourseModule(id, courseModule);
+            return ResponseEntity.ok(updatedCourseModule);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CourseModule> deleteCourseModule(@PathVariable Long id) {
-        CourseModule deletedCourseModule = courseModuleService.deleteCourseModule(id);
-        return ResponseEntity.ok(deletedCourseModule);
+    public ResponseEntity<?> deleteCourseModule(@PathVariable Long id) {
+        try {
+            CourseModule deletedCourseModule = courseModuleService.deleteCourseModule(id);
+            return ResponseEntity.ok(deletedCourseModule);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

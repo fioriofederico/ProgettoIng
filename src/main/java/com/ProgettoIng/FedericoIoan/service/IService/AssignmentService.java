@@ -1,6 +1,7 @@
 package com.ProgettoIng.FedericoIoan.service.IService;
 
 import com.ProgettoIng.FedericoIoan.model.Assignment;
+import com.ProgettoIng.FedericoIoan.model.dto.ScoreDto;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,5 +20,5 @@ public interface AssignmentService {
 
     Assignment deleteAssignment(Long id);
 
-    Assignment scoreAssignment(Long id, Integer score);
+    Assignment scoreAssignment(Long id, ScoreDto score);
 }

@@ -18,26 +18,42 @@ public class VideoController {
     private VideoDetailsServiceImpl videoDetailsService;
 
     @PostMapping
-    public ResponseEntity<VideoDetails> uploadVideo(@PathVariable Long moduleId, @RequestParam("file") MultipartFile file) {
-        VideoDetails videoDetails = videoDetailsService.uploadVideo(moduleId, file);
-        return ResponseEntity.ok(videoDetails);
+    public ResponseEntity<?> uploadVideo(@PathVariable Long moduleId, @RequestParam("file") MultipartFile file) {
+        try {
+            VideoDetails videoDetails = videoDetailsService.uploadVideo(moduleId, file);
+            return ResponseEntity.ok(videoDetails);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<VideoDetails>> getVideos(@PathVariable Long moduleId) {
-        List<VideoDetails> videoDetailsList = videoDetailsService.findVideos(moduleId);
-        return ResponseEntity.ok(videoDetailsList);
+    public ResponseEntity<?> getVideos(@PathVariable Long moduleId) {
+        try {
+            List<VideoDetails> videoDetailsList = videoDetailsService.findVideos(moduleId);
+            return ResponseEntity.ok(videoDetailsList);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoDetails> getVideo(@PathVariable Long id) {
-        VideoDetails videoDetails = videoDetailsService.findVideo(id);
-        return ResponseEntity.ok(videoDetails);
+    public ResponseEntity<?> getVideo(@PathVariable Long id) {
+        try {
+            VideoDetails videoDetails = videoDetailsService.findVideo(id);
+            return ResponseEntity.ok(videoDetails);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<VideoDetails> deleteVideo(@PathVariable Long id) {
-        VideoDetails videoDetails = videoDetailsService.deleteVideo(id);
-        return ResponseEntity.ok(videoDetails);
+    public ResponseEntity<?> deleteVideo(@PathVariable Long id) {
+        try {
+            VideoDetails videoDetails = videoDetailsService.deleteVideo(id);
+            return ResponseEntity.ok(videoDetails);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

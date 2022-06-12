@@ -19,40 +19,64 @@ public class CourseController {
 	private CourseServiceImpl courseService;
 
 	@GetMapping
-	public ResponseEntity<List<Course>> getCourses() {
-		List<Course> courses = courseService.findCourses();
-		return ResponseEntity.ok(courses);
+	public ResponseEntity<?> getCourses() {
+		try {
+			List<Course> courses = courseService.findCourses();
+			return ResponseEntity.ok(courses);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Course> getCourse(@PathVariable Long id) {
-		Course course = courseService.findCourse(id);
-		return ResponseEntity.ok(course);
+	public ResponseEntity<?> getCourse(@PathVariable Long id) {
+		try {
+			Course course = courseService.findCourse(id);
+			return ResponseEntity.ok(course);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@PostMapping
-	public ResponseEntity<Course> createCourse(@Valid @RequestBody CourseDto course) {
-		Course createdCourse = courseService.createCourse(course);
-		return ResponseEntity.ok(createdCourse);
+	public ResponseEntity<?> createCourse(@Valid @RequestBody CourseDto course) {
+		try {
+			Course createdCourse = courseService.createCourse(course);
+			return ResponseEntity.ok(createdCourse);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Course> updateCourse(@PathVariable Long id,
+	public ResponseEntity<?> updateCourse(@PathVariable Long id,
 											   @Valid @RequestBody CourseDto course) {
-		Course updatedCourse = courseService.updateCourse(id, course);
-		return ResponseEntity.ok(updatedCourse);
+		try {
+			Course updatedCourse = courseService.updateCourse(id, course);
+			return ResponseEntity.ok(updatedCourse);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Course> deleteCourse(@PathVariable Long id) {
-		Course deletedCourse = courseService.deleteCourse(id);
-		return ResponseEntity.ok(deletedCourse);
+	public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+		try {
+			Course deletedCourse = courseService.deleteCourse(id);
+			return ResponseEntity.ok(deletedCourse);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	// Enroll a user in a course
 	@PostMapping("{courseId}/enroll/{userId}")
-	public ResponseEntity<User> enrollUser(@PathVariable Long courseId, @PathVariable Long userId) {
-		User enrolledUser = courseService.enrollUser(courseId, userId);
-		return ResponseEntity.ok(enrolledUser);
+	public ResponseEntity<?> enrollUser(@PathVariable Long courseId, @PathVariable Long userId) {
+		try {
+			User enrolledUser = courseService.enrollUser(courseId, userId);
+			return ResponseEntity.ok(enrolledUser);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 }

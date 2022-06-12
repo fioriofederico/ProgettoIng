@@ -1,6 +1,7 @@
 package com.ProgettoIng.FedericoIoan.controller;
 
 import com.ProgettoIng.FedericoIoan.model.Assignment;
+import com.ProgettoIng.FedericoIoan.model.dto.ScoreDto;
 import com.ProgettoIng.FedericoIoan.service.AssignmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -67,7 +68,7 @@ public class AssignmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> scoreAssignment(@PathVariable Long id, @RequestBody Integer score) {
+    public ResponseEntity<?> scoreAssignment(@PathVariable Long id, @RequestBody ScoreDto score) {
         try {
             Assignment assignment = assignmentService.scoreAssignment(id, score);
             return ResponseEntity.ok(assignment);

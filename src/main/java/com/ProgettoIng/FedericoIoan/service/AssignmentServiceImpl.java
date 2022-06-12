@@ -4,6 +4,7 @@ package com.ProgettoIng.FedericoIoan.service;
 import com.ProgettoIng.FedericoIoan.model.Assignment;
 import com.ProgettoIng.FedericoIoan.model.DeliveryFolder;
 import com.ProgettoIng.FedericoIoan.model.User;
+import com.ProgettoIng.FedericoIoan.model.dto.ScoreDto;
 import com.ProgettoIng.FedericoIoan.repository.AssignmentRepository;
 import com.ProgettoIng.FedericoIoan.repository.DeliveryFolderRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
@@ -123,13 +124,13 @@ public class AssignmentServiceImpl implements AssignmentService {
         return assignment;
     }
 
-    public Assignment scoreAssignment(Long id, Integer score) {
+    public Assignment scoreAssignment(Long id, ScoreDto score) {
         // Get assignment
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Assignment not found"));
 
         // Set score
-        assignment.setScore(score);
+        assignment.setScore(score.getScore());
 
         // Save assignment
         return assignmentRepository.save(assignment);

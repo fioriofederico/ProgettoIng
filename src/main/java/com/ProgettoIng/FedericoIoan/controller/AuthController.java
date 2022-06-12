@@ -20,15 +20,23 @@ public class AuthController {
 	private AuthServiceImpl authService;
 
 	@PostMapping("/login")
-	public ResponseEntity<JwtDto> authenticateUser(@Valid @RequestBody UserLoginDto loginRequest) {
-		JwtDto jwtDto = authService.authenticateUser(loginRequest);
-		return ResponseEntity.ok(jwtDto);
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserLoginDto loginRequest) {
+		try {
+			JwtDto jwtDto = authService.authenticateUser(loginRequest);
+			return ResponseEntity.ok(jwtDto);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(null);
+		}
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<User> registerUser(@Valid @RequestBody UserRegistrationDto signUpRequest) {
-		User registeredUser = authService.registerUser(signUpRequest);
-		return ResponseEntity.ok(registeredUser);
+	public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto signUpRequest) {
+		try {
+			User registeredUser = authService.registerUser(signUpRequest);
+			return ResponseEntity.ok(registeredUser);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(null);
+		}
 	}
 
 	// TODO: add forgot password API function -> send email with reset password link
