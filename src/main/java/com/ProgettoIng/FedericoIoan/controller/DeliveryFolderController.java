@@ -23,13 +23,13 @@ public class DeliveryFolderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DeliveryFolder>> findDeliveryFolders(@PathVariable Long courseId) {
+    public ResponseEntity<List<DeliveryFolder>> getDeliveryFolders(@PathVariable Long courseId) {
         List<DeliveryFolder> deliveryFolders = deliveryFolderService.findDeliveryFolders(courseId);
         return ResponseEntity.ok(deliveryFolders);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DeliveryFolder> findDeliveryFolder(@PathVariable Long id) {
+    public ResponseEntity<DeliveryFolder> getDeliveryFolder(@PathVariable Long id) {
         DeliveryFolder deliveryFolder = deliveryFolderService.findDeliveryFolder(id);
         return ResponseEntity.ok(deliveryFolder);
     }

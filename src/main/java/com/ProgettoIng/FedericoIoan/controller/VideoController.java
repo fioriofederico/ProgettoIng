@@ -18,19 +18,19 @@ public class VideoController {
     private VideoDetailsServiceImpl videoDetailsService;
 
     @PostMapping
-    public ResponseEntity<VideoDetails> uploadVideo(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        VideoDetails videoDetails = videoDetailsService.uploadVideo(id, file);
+    public ResponseEntity<VideoDetails> uploadVideo(@PathVariable Long moduleId, @RequestParam("file") MultipartFile file) {
+        VideoDetails videoDetails = videoDetailsService.uploadVideo(moduleId, file);
         return ResponseEntity.ok(videoDetails);
     }
 
     @GetMapping
-    public ResponseEntity<List<VideoDetails>> findVideos(@PathVariable Long moduleId) {
+    public ResponseEntity<List<VideoDetails>> getVideos(@PathVariable Long moduleId) {
         List<VideoDetails> videoDetailsList = videoDetailsService.findVideos(moduleId);
         return ResponseEntity.ok(videoDetailsList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoDetails> findVideo(@PathVariable Long id) {
+    public ResponseEntity<VideoDetails> getVideo(@PathVariable Long id) {
         VideoDetails videoDetails = videoDetailsService.findVideo(id);
         return ResponseEntity.ok(videoDetails);
     }
