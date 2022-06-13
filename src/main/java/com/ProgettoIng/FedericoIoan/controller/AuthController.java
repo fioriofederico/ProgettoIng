@@ -38,8 +38,4 @@ public class AuthController {
 			return ResponseEntity.badRequest().body(null);
 		}
 	}
-
-	// TODO: add forgot password API function -> send email with reset password link
-
-	// TODO: add reset password API function
 }

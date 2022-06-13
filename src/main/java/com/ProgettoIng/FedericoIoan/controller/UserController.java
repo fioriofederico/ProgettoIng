@@ -10,12 +10,13 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     UserServiceImpl userService;
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<?> getUser() {
         try {
             List<User> users = userService.findUsers();
@@ -25,7 +26,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {
         try {
             User user = userService.findUser(userId);
@@ -35,7 +36,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/update-password/{userId}")
+    @PutMapping("/update-password/{userId}")
     public ResponseEntity<?> updatePwd(@PathVariable Long userId, @RequestBody User userDto) {
         try {
             User updatedUser = userService.updatePwd(userId, userDto);
@@ -45,7 +46,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {
 			User deleteUser = userService.deleteUser(userId);
@@ -53,5 +54,10 @@ public class UserController {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+    }
+
+    @GetMapping("/identify")
+    public ResponseEntity<User> getActualUser() {
+        return ResponseEntity.ok(userService.getUserWithAuthorities().get());
     }
 }

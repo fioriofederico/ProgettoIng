@@ -4,12 +4,18 @@ import com.ProgettoIng.FedericoIoan.model.Course;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
 import com.ProgettoIng.FedericoIoan.service.CourseServiceImpl;
+import com.ProgettoIng.FedericoIoan.service.PdfGenerateServiceImpl;
+import com.ProgettoIng.FedericoIoan.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/courses")
@@ -17,6 +23,12 @@ public class CourseController {
 
 	@Autowired
 	private CourseServiceImpl courseService;
+
+	@Autowired
+	private UserServiceImpl userService;
+
+	@Autowired
+	private PdfGenerateServiceImpl pdfGenerateService;
 
 	@GetMapping
 	public ResponseEntity<?> getCourses() {
@@ -75,6 +87,36 @@ public class CourseController {
 		try {
 			User enrolledUser = courseService.enrollUser(courseId, userId);
 			return ResponseEntity.ok(enrolledUser);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	// Get course certificate
+	@GetMapping("{id}/certificate")
+	public ResponseEntity<?> getCertificate(@PathVariable Long id) {
+		try {
+			// In data we store all the objectes we need for the certificate
+			Map<String, Object> data = new HashMap<>();
+
+			// Get course
+			Course course = courseService.findCourse(id);
+
+			// Get student
+			User student = userService.getUserWithAuthorities().get();
+
+			// Update data
+			data.put("course", course);
+			data.put("student", student);
+
+			// Genereate pdf
+			Resource certificate = pdfGenerateService.generatePdfFile("certificate", data, "certificate.pdf");
+
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION,
+							"attachment; filename=\"" + certificate.getFilename() + "\"")
+					.body(certificate);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

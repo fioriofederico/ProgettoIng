@@ -1,14 +1,17 @@
 package com.ProgettoIng.FedericoIoan.service;
 
+import com.ProgettoIng.FedericoIoan.config.SecurityUtils;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,5 +46,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
+    public Optional<User> getUserWithAuthorities() {
+        return SecurityUtils.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+    }
 
 }
