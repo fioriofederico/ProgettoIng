@@ -45,9 +45,8 @@ public class DeliveryFolderServiceImpl implements DeliveryFolderService {
             Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
             return deliveryFolderRepository.findDeliveryFoldersByCourse(course);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public DeliveryFolder findDeliveryFolder(Long id) {

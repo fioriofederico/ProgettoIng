@@ -45,6 +45,14 @@ public class User {
 	@JsonIgnore
 	Set<CourseEnrollment> enrolledCourses;
 
+	@OneToMany(mappedBy = "sender")
+	@JsonIgnore
+	Set<ChatMessage> sendedMessages;
+
+	@OneToMany(mappedBy = "receiver")
+	@JsonIgnore
+	Set<ChatMessage> receivedMessages;
+
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime dateInsert;
 
