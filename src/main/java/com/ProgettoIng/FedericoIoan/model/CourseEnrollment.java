@@ -1,6 +1,7 @@
 package com.ProgettoIng.FedericoIoan.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 public class CourseEnrollment {
 
     @EmbeddedId
+    @JsonIgnore
     CourseEnrollmentKey id;
 
     @ManyToOne

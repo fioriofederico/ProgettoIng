@@ -1,6 +1,5 @@
 package com.ProgettoIng.FedericoIoan.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -26,11 +24,10 @@ public class Course {
 
 	private String name;
 
-	private String duration;
+	private String description;
 
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
-	@JsonIgnore
 	private User owner;
 
 	@OneToMany(mappedBy = "course")

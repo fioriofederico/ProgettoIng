@@ -1,6 +1,11 @@
 package com.ProgettoIng.FedericoIoan.repository;
 
 import com.ProgettoIng.FedericoIoan.model.Course;
+import com.ProgettoIng.FedericoIoan.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CourseRepository extends JpaRepository<Course, Long> {}
+import java.util.List;
+
+public interface CourseRepository extends JpaRepository<Course, Long> {
+    List<Course> findCoursesByOwner(User owner);
+}

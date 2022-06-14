@@ -1,6 +1,10 @@
 package com.ProgettoIng.FedericoIoan.service.IService;
 
+import com.ProgettoIng.FedericoIoan.model.Course;
 import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
+import com.ProgettoIng.FedericoIoan.model.User;
+
+import java.util.List;
 
 public interface CourseEnrollmentService {
 
@@ -13,4 +17,8 @@ public interface CourseEnrollmentService {
     CourseEnrollment enableCertificate(Long courseId, Long userId);
 
     Boolean isUserCertificateEnabled(Long courseId, Long userId);
+
+    List<User> findEnrolledUsers(Long courseId);
+
+    List<Course> findEnrolledCourses(Long userId);
 }

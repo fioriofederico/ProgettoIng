@@ -2,6 +2,7 @@ package com.ProgettoIng.FedericoIoan.controller;
 
 import com.ProgettoIng.FedericoIoan.model.Course;
 import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
+import com.ProgettoIng.FedericoIoan.model.Role;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
 import com.ProgettoIng.FedericoIoan.model.dto.RatingDto;
@@ -9,7 +10,6 @@ import com.ProgettoIng.FedericoIoan.service.CourseEnrollmentServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.CourseServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.PdfGenerateServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.UserServiceImpl;
-import org.apache.http.client.protocol.ResponseProcessCookies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/courses")
@@ -47,10 +48,37 @@ public class CourseController {
 		}
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getCourse(@PathVariable Long id) {
+	@GetMapping("/manage/{role}")
+	public ResponseEntity<?> getUserCourses(@PathVariable String role) {
 		try {
-			Course course = courseService.findCourse(id);
+			// Get user from session
+			User user = userService.getUserWithAuthorities().get();
+
+			Set<String> userRoles = user.getRolesNames();
+
+			if (!userRoles.contains(role))
+				throw new RuntimeException("User is not authorized to access this area.");
+
+			switch (role) {
+				case "tutor":
+					List<Course> ownedCourses = courseService.findTutorCourses(user.getId());
+					return ResponseEntity.ok(ownedCourses);
+				case "student":
+					List<Course> enrolledCourses = courseEnrollmentService.findEnrolledCourses(user.getId());
+					return ResponseEntity.ok(enrolledCourses);
+				default:
+					throw new RuntimeException("Selected role does not exixst.");
+			}
+
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/{courseId}")
+	public ResponseEntity<?> getCourse(@PathVariable Long courseId) {
+		try {
+			Course course = courseService.findCourse(courseId);
 			return ResponseEntity.ok(course);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -67,40 +95,40 @@ public class CourseController {
 		}
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateCourse(@PathVariable Long id, @Valid @RequestBody CourseDto course) {
+	@PutMapping("/{courseId}")
+	public ResponseEntity<?> updateCourse(@PathVariable Long courseId, @Valid @RequestBody CourseDto course) {
 		try {
-			Course updatedCourse = courseService.updateCourse(id, course);
+			Course updatedCourse = courseService.updateCourse(courseId, course);
 			return ResponseEntity.ok(updatedCourse);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+	@DeleteMapping("/{courseId}")
+	public ResponseEntity<?> deleteCourse(@PathVariable Long courseId) {
 		try {
-			Course deletedCourse = courseService.deleteCourse(id);
+			Course deletedCourse = courseService.deleteCourse(courseId);
 			return ResponseEntity.ok(deletedCourse);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
-	@GetMapping("{id}/certificate")
-	public ResponseEntity<?> getCertificate(@PathVariable Long id) {
+	@GetMapping("{courseId}/certificate")
+	public ResponseEntity<?> getCertificate(@PathVariable Long courseId) {
 		try {
 			// In data we store all the objectes we need for the certificate
 			Map<String, Object> data = new HashMap<>();
 
 			// Get course
-			Course course = courseService.findCourse(id);
+			Course course = courseService.findCourse(courseId);
 
 			// Get student
 			User student = userService.getUserWithAuthorities().get();
 
 			// Check if user certificate is enabled
-			if (!courseEnrollmentService.isUserCertificateEnabled(id, student.getId()))
+			if (!courseEnrollmentService.isUserCertificateEnabled(courseId, student.getId()))
 				throw new RuntimeException("Certificate is not available, ask to the course owner for permission");
 
 			// Update data
@@ -166,5 +194,13 @@ public class CourseController {
 		}
 	}
 
-
+	@GetMapping("{courseId}/students")
+	public ResponseEntity<?> getEnrolledStudents(@PathVariable Long courseId) {
+		try {
+			List<User> students = courseEnrollmentService.findEnrolledUsers(courseId);
+			return ResponseEntity.ok(students);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 }

@@ -11,6 +11,8 @@ public interface CourseService {
 
     List<Course> findCourses();
 
+    List<Course> findTutorCourses(Long ownerId);
+
     Course findCourse(Long id);
 
     Course createCourse(CourseDto course);

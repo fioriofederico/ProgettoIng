@@ -1,6 +1,7 @@
 package com.ProgettoIng.FedericoIoan.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -32,13 +32,13 @@ public class User {
 
 	private String email;
 
+	@JsonIgnore
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
-	@JsonIgnore
 	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "student")
@@ -65,5 +65,13 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = encodedPassword;
+	}
+
+	public Set<String> getRolesNames() {
+		Set<String> rolesNames = new HashSet<>();
+		for (Role role: this.getRoles()) {
+			rolesNames.add(role.getName().toString().toLowerCase());
+		}
+		return rolesNames;
 	}
 }

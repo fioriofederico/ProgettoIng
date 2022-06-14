@@ -1,11 +1,8 @@
 package com.ProgettoIng.FedericoIoan.service;
 
 import com.ProgettoIng.FedericoIoan.model.Course;
-import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
-import com.ProgettoIng.FedericoIoan.model.CourseEnrollmentKey;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
-import com.ProgettoIng.FedericoIoan.repository.CourseEnrollmentRepository;
 import com.ProgettoIng.FedericoIoan.repository.CourseRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.CourseService;
@@ -30,6 +27,16 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findAll();
     }
 
+    public List<Course> findTutorCourses(Long ownerId) {
+        try {
+            User owner = userRepository.findById(ownerId).orElseThrow(Exception::new);
+            List<Course> courses = courseRepository.findCoursesByOwner(owner);
+            return courses;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Course findCourse(Long id) {
         try {
             return courseRepository.findById(id).orElseThrow(Exception::new);
@@ -42,7 +49,7 @@ public class CourseServiceImpl implements CourseService {
         Course courseToCreate = new Course();
 
         courseToCreate.setName(course.getName());
-        courseToCreate.setDuration(course.getDuration());
+        courseToCreate.setDescription(course.getDuration());
 
         try {
             User owner = userRepository.findById(course.getOwnerId()).orElseThrow(Exception::new);
@@ -64,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
 
         // Update course
         courseToUpdate.setName(course.getName());
-        courseToUpdate.setDuration(course.getDuration());
+        courseToUpdate.setDescription(course.getDuration());
 
         return courseRepository.save(courseToUpdate);
     }

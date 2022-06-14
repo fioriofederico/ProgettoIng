@@ -11,6 +11,10 @@ import com.ProgettoIng.FedericoIoan.service.IService.CourseEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 
 @Service
 public class CourseEnrollmentServiceImpl implements CourseEnrollmentService {
@@ -105,4 +109,44 @@ public class CourseEnrollmentServiceImpl implements CourseEnrollmentService {
             throw new RuntimeException(e);
         }
     }
+
+    public List<User> findEnrolledUsers(Long courseId) {
+        try {
+            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
+
+            List<CourseEnrollment> courseEnrollments = courseEnrollmentRepository.findCourseEnrollmentByCourse(course);
+            
+            List<User> enrolledStudents = new ArrayList<User>();
+
+            for (CourseEnrollment courseEnrollment: courseEnrollments) {
+                enrolledStudents.add(courseEnrollment.getStudent());
+            }
+
+            return  enrolledStudents;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Course> findEnrolledCourses(Long userId) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(Exception::new);
+
+            List<CourseEnrollment> courseEnrollments = courseEnrollmentRepository.findCourseEnrollmentByStudent(user);
+
+            List<Course> enrolledCourses = new ArrayList<Course>();
+
+            for (CourseEnrollment courseEnrollment: courseEnrollments) {
+                enrolledCourses.add(courseEnrollment.getCourse());
+            }
+
+            return  enrolledCourses;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
