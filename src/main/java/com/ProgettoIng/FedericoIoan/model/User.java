@@ -17,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "users")
 public class User {
 
 	@Id
@@ -40,12 +41,9 @@ public class User {
 	@JsonIgnore
 	private Set<Role> roles = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "enrolled_users",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "course_id"))
+	@OneToMany(mappedBy = "student")
 	@JsonIgnore
-	private List<Course> attendedCourses;
+	Set<CourseEnrollment> enrolledCourses;
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime dateInsert;

@@ -1,8 +1,6 @@
 package com.ProgettoIng.FedericoIoan.service;
 
 import com.ProgettoIng.FedericoIoan.service.IService.PdfGenerateService;
-import com.lowagie.text.DocumentException;
-import org.hibernate.cfg.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;

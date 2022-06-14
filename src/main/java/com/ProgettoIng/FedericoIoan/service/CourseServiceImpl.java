@@ -1,8 +1,11 @@
 package com.ProgettoIng.FedericoIoan.service;
 
 import com.ProgettoIng.FedericoIoan.model.Course;
+import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
+import com.ProgettoIng.FedericoIoan.model.CourseEnrollmentKey;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
+import com.ProgettoIng.FedericoIoan.repository.CourseEnrollmentRepository;
 import com.ProgettoIng.FedericoIoan.repository.CourseRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.CourseService;
@@ -74,26 +77,5 @@ public class CourseServiceImpl implements CourseService {
             return courseToDelete;
         }
         return null;
-    }
-
-    public User enrollUser(Long courseId, Long userId) {
-
-        if (!courseRepository.existsById(courseId))
-            throw new RuntimeException("Course not found");
-
-        if (!userRepository.existsById(userId))
-            throw new RuntimeException("User not found");
-
-        Course course = courseRepository.findById(courseId).get();
-        User user = userRepository.findById(userId).get();
-
-//        course.getEnrolledUsers().add(user);
-        user.getAttendedCourses().add(course);
-
-//        courseRepository.save(course);
-        userRepository.save(user);
-
-        return user;
-
     }
 }

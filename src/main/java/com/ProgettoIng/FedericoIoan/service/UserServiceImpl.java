@@ -1,6 +1,6 @@
 package com.ProgettoIng.FedericoIoan.service;
 
-import com.ProgettoIng.FedericoIoan.config.SecurityUtils;
+import com.ProgettoIng.FedericoIoan.utils.SecurityUtils;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.UserService;

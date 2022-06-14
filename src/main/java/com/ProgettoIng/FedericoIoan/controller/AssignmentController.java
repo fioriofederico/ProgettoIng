@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -68,7 +69,7 @@ public class AssignmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> scoreAssignment(@PathVariable Long id, @RequestBody ScoreDto score) {
+    public ResponseEntity<?> scoreAssignment(@PathVariable Long id, @Valid @RequestBody ScoreDto score) {
         try {
             Assignment assignment = assignmentService.scoreAssignment(id, score);
             return ResponseEntity.ok(assignment);

@@ -1,4 +1,4 @@
-package com.ProgettoIng.FedericoIoan.config;
+package com.ProgettoIng.FedericoIoan.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

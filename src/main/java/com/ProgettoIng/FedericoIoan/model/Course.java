@@ -33,12 +33,10 @@ public class Course {
 	@JsonIgnore
 	private User owner;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "enrolled_users",
-			joinColumns = @JoinColumn(name = "course_id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id"))
-	@JsonBackReference(value = "enrolledUsers")
-	private Set<User> enrolledUsers = new HashSet<>();
+	@OneToMany(mappedBy = "course")
+	@JsonIgnore
+	Set<CourseEnrollment> enrolledUsers;
+
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime dateInsert;

@@ -25,17 +25,17 @@ public class AuthController {
 			JwtDto jwtDto = authService.authenticateUser(loginRequest);
 			return ResponseEntity.ok(jwtDto);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(null);
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
-	@PostMapping("/signup")
+	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto signUpRequest) {
 		try {
 			User registeredUser = authService.registerUser(signUpRequest);
 			return ResponseEntity.ok(registeredUser);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(null);
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 }

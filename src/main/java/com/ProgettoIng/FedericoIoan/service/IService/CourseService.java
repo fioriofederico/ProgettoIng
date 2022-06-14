@@ -2,6 +2,7 @@ package com.ProgettoIng.FedericoIoan.service.IService;
 
 
 import com.ProgettoIng.FedericoIoan.model.Course;
+import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
 
 import java.util.List;
@@ -17,5 +18,4 @@ public interface CourseService {
     Course updateCourse(Long id, CourseDto course);
 
     Course deleteCourse(Long id);
-
 }
