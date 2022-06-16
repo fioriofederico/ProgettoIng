@@ -26,8 +26,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
             User sender = userRepository.findById(senderId).orElseThrow(Exception::new);
             User receiver = userRepository.findById(receiverId).orElseThrow(Exception::new);
 
-            List <ChatMessage> messages = chatMessageRepository.findChatMessagesBySenderAndReceiver(sender, receiver);
-            return messages;
+            return chatMessageRepository.findChatMessagesBySenderAndReceiver(sender, receiver);
 
         } catch (Exception e) {
             throw new RuntimeException(e);

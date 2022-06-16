@@ -23,7 +23,7 @@ public class ChatMessageController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("{receiverId}")
+    @GetMapping("/{receiverId}")
     public ResponseEntity<?> getChat(@PathVariable Long receiverId) {
         try {
             // Get sender by session
@@ -37,7 +37,7 @@ public class ChatMessageController {
         }
     }
 
-    @GetMapping("{messageId}")
+/*    @GetMapping("/{messageId}")
     public ResponseEntity<?> getChatMessage(@PathVariable Long messageId) {
         try {
             ChatMessage message = chatMessageService.findChatMessage(messageId);
@@ -46,9 +46,9 @@ public class ChatMessageController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
+    }*/
 
-    @PostMapping("{receiverId}")
+    @PostMapping("/message/{receiverId}")
     public ResponseEntity<?> sendMessage(@PathVariable Long receiverId,
                                          @Valid @RequestBody ChatMessageDto chatMessageDto) {
         try {
@@ -64,7 +64,7 @@ public class ChatMessageController {
         }
     }
 
-    @DeleteMapping("{receiverId}")
+    @DeleteMapping("/{receiverId}")
     public ResponseEntity<?> sendMessage(@PathVariable Long receiverId) {
         try {
             // Get sender by session
