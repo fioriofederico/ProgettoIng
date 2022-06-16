@@ -1,6 +1,9 @@
 package com.ProgettoIng.FedericoIoan.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +42,8 @@ public class User {
 	@JoinTable(	name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="name")
+	@JsonIdentityReference(alwaysAsId=true)
 	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "student")
@@ -73,13 +78,5 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = encodedPassword;
-	}
-
-	public Set<String> getRolesNames() {
-		Set<String> rolesNames = new HashSet<>();
-		for (Role role: this.getRoles()) {
-			rolesNames.add(role.getName().toString().toLowerCase());
-		}
-		return rolesNames;
 	}
 }

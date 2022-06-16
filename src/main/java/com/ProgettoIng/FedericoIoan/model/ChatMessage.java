@@ -27,14 +27,10 @@ public class ChatMessage {
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
     User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
     User receiver;
 
     String message;

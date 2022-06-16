@@ -54,10 +54,9 @@ public class CourseController {
 			// Get user from session
 			User user = userService.getUserWithAuthorities().get();
 
-			Set<String> userRoles = user.getRolesNames();
-
-			if (!userRoles.contains(role))
-				throw new RuntimeException("User is not authorized to access this area.");
+			// Check if user has the role
+			if (! user.getRoles().contains(Role.valueOf(role)))
+				return ResponseEntity.badRequest().body("User is not " + role);
 
 			switch (role) {
 				case "tutor":

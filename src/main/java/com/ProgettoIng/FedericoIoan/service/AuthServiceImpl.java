@@ -11,6 +11,7 @@ import com.ProgettoIng.FedericoIoan.repository.RoleRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.AuthService;
 import com.ProgettoIng.FedericoIoan.utils.JwtUtils;
+import com.ProgettoIng.FedericoIoan.utils.SecurityUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,12 +52,19 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+/*        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
+        User user = userRepository.findOneWithAuthoritiesByUsername(loginRequest.getUsername()).get();
+
+/*
         return new JwtDto(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles);
+*/
+
+        return new JwtDto(jwt, user.getId(), user.getUsername(), user.getEmail(), user.getRoles());
+
     }
 
     public User registerUser(UserRegistrationDto signUpRequest) {
