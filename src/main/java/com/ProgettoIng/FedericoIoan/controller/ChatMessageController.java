@@ -26,12 +26,12 @@ public class ChatMessageController {
     @GetMapping("/{receiverId}")
     public ResponseEntity<?> getChat(@PathVariable Long receiverId) {
         try {
-            // Get sender by session
             User sender = userService.getUserWithAuthorities().get();
 
             List<ChatMessage> messages = chatMessageService.findChat(sender.getId(), receiverId);
 
             return ResponseEntity.ok(messages);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -52,13 +52,12 @@ public class ChatMessageController {
     public ResponseEntity<?> sendMessage(@PathVariable Long receiverId,
                                          @Valid @RequestBody ChatMessageDto chatMessageDto) {
         try {
-            // Get sender by session
             User sender = userService.getUserWithAuthorities().get();
 
-            // Send message
             ChatMessage message = chatMessageService.sendMessage(sender.getId(), receiverId, chatMessageDto);
 
             return ResponseEntity.ok(message);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -67,13 +66,13 @@ public class ChatMessageController {
     @DeleteMapping("/{receiverId}")
     public ResponseEntity<?> sendMessage(@PathVariable Long receiverId) {
         try {
-            // Get sender by session
             User sender = userService.getUserWithAuthorities().get();
 
-            // Send message
             chatMessageService.deleteChat(sender.getId(), receiverId);
 
-            return ResponseEntity.ok("Chat deleted");
+            return ResponseEntity.ok("All messages between " + sender.getId() + " and " + receiverId
+                    + " are now deleted");
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

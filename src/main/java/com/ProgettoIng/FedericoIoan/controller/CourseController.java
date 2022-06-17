@@ -43,6 +43,7 @@ public class CourseController {
 		try {
 			List<Course> courses = courseService.findCourses();
 			return ResponseEntity.ok(courses);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -51,10 +52,8 @@ public class CourseController {
 	@GetMapping("/manage/{role}")
 	public ResponseEntity<?> getUserCourses(@PathVariable String role) {
 		try {
-			// Get user from session
 			User user = userService.getUserWithAuthorities().get();
 
-			// Check if user has the role
 			if (! user.getRoles().contains(Role.valueOf(role)))
 				return ResponseEntity.badRequest().body("User is not " + role);
 
@@ -66,7 +65,7 @@ public class CourseController {
 					List<Course> enrolledCourses = courseEnrollmentService.findEnrolledCourses(user.getId());
 					return ResponseEntity.ok(enrolledCourses);
 				default:
-					throw new RuntimeException("Selected role does not exixst.");
+					return ResponseEntity.badRequest().body("Selected role does not exist");
 			}
 
 		} catch (Exception e) {
@@ -79,6 +78,7 @@ public class CourseController {
 		try {
 			Course course = courseService.findCourse(courseId);
 			return ResponseEntity.ok(course);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -89,6 +89,7 @@ public class CourseController {
 		try {
 			Course createdCourse = courseService.createCourse(course);
 			return ResponseEntity.ok(createdCourse);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -99,6 +100,7 @@ public class CourseController {
 		try {
 			Course updatedCourse = courseService.updateCourse(courseId, course);
 			return ResponseEntity.ok(updatedCourse);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -109,6 +111,7 @@ public class CourseController {
 		try {
 			Course deletedCourse = courseService.deleteCourse(courseId);
 			return ResponseEntity.ok(deletedCourse);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -117,25 +120,28 @@ public class CourseController {
 	@GetMapping("{courseId}/certificate")
 	public ResponseEntity<?> getCertificate(@PathVariable Long courseId) {
 		try {
-			// In data we store all the objectes we need for the certificate
-			Map<String, Object> data = new HashMap<>();
+			Map<String, Object> certificateData = new HashMap<>();
 
-			// Get course
 			Course course = courseService.findCourse(courseId);
-
-			// Get student
 			User student = userService.getUserWithAuthorities().get();
 
-			// Check if user certificate is enabled
+			// Check if user is enrolled in the course
+			if (! courseEnrollmentService.isEnrolled(courseId, student.getId()))
+				return ResponseEntity.badRequest().body("User is not enrolled in the course");
+
 			if (!courseEnrollmentService.isUserCertificateEnabled(courseId, student.getId()))
-				throw new RuntimeException("Certificate is not available, ask to the course owner for permission");
+				return ResponseEntity.badRequest()
+						.body("Certificate is not available, ask to the course owner for permission");
 
-			// Update data
-			data.put("course", course);
-			data.put("student", student);
+			certificateData.put("course", course);
+			certificateData.put("student", student);
 
-			// Genereate pdf
-			Resource certificate = pdfGenerateService.generatePdfFile("certificate", data, "certificate.pdf");
+			String certificateName = student.getUsername() + "_" + course.getName() + ".pdf";
+
+			certificateName = certificateName.replaceAll(" ", "_");
+
+			Resource certificate = pdfGenerateService.generatePdfFile("certificate",
+					certificateData, certificateName);
 
 			return ResponseEntity.ok()
 					.header(HttpHeaders.CONTENT_DISPOSITION,
@@ -152,6 +158,7 @@ public class CourseController {
 		try {
 			CourseEnrollment courseEnrollment = courseEnrollmentService.enrollUser(courseId, userId);
 			return ResponseEntity.ok(courseEnrollment);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -162,6 +169,7 @@ public class CourseController {
 		try {
 			CourseEnrollment courseEnrollment = courseEnrollmentService.unenrollUser(courseId, userId);
 			return ResponseEntity.ok(courseEnrollment);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -170,7 +178,6 @@ public class CourseController {
 	@PostMapping("{courseId}/rate")
 	public ResponseEntity<?> rateCourse(@PathVariable Long courseId, @Valid @RequestBody RatingDto rating) {
 		try {
-			// Get user by session
 			User student = userService.getUserWithAuthorities().orElseThrow(Exception::new);
 
 			CourseEnrollment courseEnrollment = courseEnrollmentService
@@ -188,6 +195,7 @@ public class CourseController {
 		try {
 			CourseEnrollment courseEnrollment = courseEnrollmentService.enableCertificate(courseId, userId);
 			return ResponseEntity.ok(courseEnrollment);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -198,6 +206,7 @@ public class CourseController {
 		try {
 			List<User> students = courseEnrollmentService.findEnrolledUsers(courseId);
 			return ResponseEntity.ok(students);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

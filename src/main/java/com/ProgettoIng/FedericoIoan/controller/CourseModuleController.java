@@ -25,6 +25,7 @@ public class CourseModuleController {
         try {
             CourseModule createdCourseModule = courseModuleService.createCourseModule(courseModule);
             return ResponseEntity.ok(createdCourseModule);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -35,6 +36,7 @@ public class CourseModuleController {
         try {
             List<CourseModule> courseModules = courseModuleService.findCourseModules(courseId);
             return ResponseEntity.ok(courseModules);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -45,6 +47,7 @@ public class CourseModuleController {
         try {
             CourseModule courseModule = courseModuleService.findCourseModule(id);
             return ResponseEntity.ok(courseModule);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -56,6 +59,7 @@ public class CourseModuleController {
         try {
             CourseModule updatedCourseModule = courseModuleService.updateCourseModule(id, courseModule);
             return ResponseEntity.ok(updatedCourseModule);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -66,6 +70,7 @@ public class CourseModuleController {
         try {
             CourseModule deletedCourseModule = courseModuleService.deleteCourseModule(id);
             return ResponseEntity.ok(deletedCourseModule);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

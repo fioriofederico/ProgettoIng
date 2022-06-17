@@ -21,6 +21,7 @@ public class UserController {
         try {
             List<User> users = userService.findUsers();
             return ResponseEntity.ok(users);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -31,6 +32,7 @@ public class UserController {
         try {
             User user = userService.findUser(userId);
             return ResponseEntity.ok(user);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -41,6 +43,7 @@ public class UserController {
         try {
             User updatedUser = userService.updatePwd(userId, userDto);
             return ResponseEntity.ok(updatedUser);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -51,10 +54,13 @@ public class UserController {
         try {
 			User deleteUser = userService.deleteUser(userId);
 			return ResponseEntity.ok(deleteUser);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
     }
+
+    // TODO: delete this method
 
     @GetMapping("/identify")
     public ResponseEntity<User> getActualUser() {

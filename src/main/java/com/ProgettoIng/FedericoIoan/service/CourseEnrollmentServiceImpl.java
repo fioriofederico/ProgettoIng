@@ -148,5 +148,15 @@ public class CourseEnrollmentServiceImpl implements CourseEnrollmentService {
         }
     }
 
+    public boolean isEnrolled(Long courseId, Long id) {
+        try {
+            CourseEnrollment courseEnrollment = courseEnrollmentRepository
+                    .findById(new CourseEnrollmentKey(courseId, id)).orElseThrow(Exception::new);
 
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

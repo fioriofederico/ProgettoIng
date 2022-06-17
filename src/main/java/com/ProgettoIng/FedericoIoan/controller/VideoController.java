@@ -22,6 +22,7 @@ public class VideoController {
         try {
             VideoDetails videoDetails = videoDetailsService.uploadVideo(moduleId, file);
             return ResponseEntity.ok(videoDetails);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -32,6 +33,7 @@ public class VideoController {
         try {
             List<VideoDetails> videoDetailsList = videoDetailsService.findVideos(moduleId);
             return ResponseEntity.ok(videoDetailsList);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -42,6 +44,7 @@ public class VideoController {
         try {
             VideoDetails videoDetails = videoDetailsService.findVideo(id);
             return ResponseEntity.ok(videoDetails);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -52,6 +55,7 @@ public class VideoController {
         try {
             VideoDetails videoDetails = videoDetailsService.deleteVideo(id);
             return ResponseEntity.ok(videoDetails);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

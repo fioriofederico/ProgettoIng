@@ -24,6 +24,7 @@ public class AuthController {
 		try {
 			JwtDto jwtDto = authService.authenticateUser(loginRequest);
 			return ResponseEntity.ok(jwtDto);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -34,6 +35,7 @@ public class AuthController {
 		try {
 			User registeredUser = authService.registerUser(signUpRequest);
 			return ResponseEntity.ok(registeredUser);
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

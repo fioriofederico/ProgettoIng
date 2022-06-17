@@ -34,6 +34,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 
         String htmlContent = templateEngine.process(templateName, context);
         try {
+            // TODO: check next line
             FileOutputStream fileOutputStream = new FileOutputStream(folderPath + "/" + pdfFileName);
 
             ITextRenderer renderer = new ITextRenderer();
@@ -43,6 +44,9 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             renderer.finishPDF();
 
             Path file = Paths.get(folderPath).resolve(pdfFileName);
+
+            // TODO: delete certificate file after download
+
             return new UrlResource(file.toUri());
 
         } catch (Exception e) {

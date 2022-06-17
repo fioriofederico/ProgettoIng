@@ -11,10 +11,7 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 import java.util.Collections;
 
-/**
- * Il Cross-Origin Resource Sharing (CORS) è un meccanismo che usa header HTTP addizionali
- * per indicare che un dominio dispone dell'autorizzazione per accedere alle risorse selezionate
- * **/
+
 @Configuration
 public class CorsConfig {
 
@@ -23,7 +20,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(false);
-        config.addAllowedOrigin("*"); // e.g. http://domain1.com
+        config.addAllowedOrigin("*");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
 
