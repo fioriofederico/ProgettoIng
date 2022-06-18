@@ -63,7 +63,7 @@ public class CourseServiceImpl implements CourseService {
 
     public Course updateCourse(Long id, CourseDto course) {
         // Check if the course exists
-        if (courseRepository.existsById(id))
+        if (!courseRepository.existsById(id))
             throw new RuntimeException("Course not found");
 
         // Get course to update
