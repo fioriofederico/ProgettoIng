@@ -22,7 +22,7 @@ public class CourseModuleServiceImpl implements CourseModuleService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public CourseModule createCourseModule(CourseModuleDto courseModule) {
+    public CourseModule createCourseModule(Long courseId, CourseModuleDto courseModule) {
 
         CourseModule courseModuleToCreate = new CourseModule();
 
@@ -30,7 +30,7 @@ public class CourseModuleServiceImpl implements CourseModuleService {
         courseModuleToCreate.setDescription(courseModule.getDescription());
 
         try {
-            Course course = courseRepository.findById(courseModule.getCourseId()).orElseThrow(Exception::new);
+            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
             courseModuleToCreate.setCourse(course);
 
             return courseModuleRepository.save(courseModuleToCreate);

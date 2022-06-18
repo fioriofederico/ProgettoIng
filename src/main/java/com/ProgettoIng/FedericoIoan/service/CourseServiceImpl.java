@@ -49,7 +49,7 @@ public class CourseServiceImpl implements CourseService {
         Course courseToCreate = new Course();
 
         courseToCreate.setName(course.getName());
-        courseToCreate.setDescription(course.getDuration());
+        courseToCreate.setDescription(course.getDescription());
 
         try {
             User owner = userRepository.findById(course.getOwnerId()).orElseThrow(Exception::new);
@@ -71,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
 
         // Update course
         courseToUpdate.setName(course.getName());
-        courseToUpdate.setDescription(course.getDuration());
+        courseToUpdate.setDescription(course.getDescription());
 
         return courseRepository.save(courseToUpdate);
     }

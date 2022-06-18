@@ -21,9 +21,10 @@ public class CourseModuleController {
     private CourseModuleServiceImpl courseModuleService;
 
     @PostMapping
-    public ResponseEntity<?> createCourseModule(@Valid @RequestBody CourseModuleDto courseModule) {
+    public ResponseEntity<?> createCourseModule(@PathVariable Long courseId,
+                                                @Valid @RequestBody CourseModuleDto courseModule) {
         try {
-            CourseModule createdCourseModule = courseModuleService.createCourseModule(courseModule);
+            CourseModule createdCourseModule = courseModuleService.createCourseModule(courseId, courseModule);
             return ResponseEntity.ok(createdCourseModule);
 
         } catch (Exception e) {

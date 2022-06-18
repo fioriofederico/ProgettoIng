@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CourseModuleService {
 
-    CourseModule createCourseModule(CourseModuleDto courseModule);
+    CourseModule createCourseModule(Long courseId, CourseModuleDto courseModule);
 
     List<CourseModule> findCourseModules(Long courseId);
 

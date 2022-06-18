@@ -13,6 +13,4 @@ public class CourseModuleDto {
     @NotNull
     private String description;
 
-    @NotNull
-    private Long courseId;
 }
