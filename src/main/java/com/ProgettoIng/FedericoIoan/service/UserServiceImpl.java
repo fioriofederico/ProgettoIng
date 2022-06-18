@@ -1,5 +1,7 @@
 package com.ProgettoIng.FedericoIoan.service;
 
+import com.ProgettoIng.FedericoIoan.model.dto.UserLoginDto;
+import com.ProgettoIng.FedericoIoan.model.dto.UserRegistrationDto;
 import com.ProgettoIng.FedericoIoan.utils.SecurityUtils;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
@@ -50,5 +52,4 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
     }
-
 }
