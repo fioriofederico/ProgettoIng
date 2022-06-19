@@ -1,15 +1,18 @@
 package com.ProgettoIng.FedericoIoan.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "course_enrollments")
 public class CourseEnrollment {
@@ -32,9 +35,9 @@ public class CourseEnrollment {
     @JsonIdentityReference(alwaysAsId=true)
     Course course;
 
-    // Each student needs to rate the course
+    // The student can rate the course
     int rating;
 
-    // The student needs to be evaluated by the tutor to get the certificate
+    // The student needs the permission of the tutor to get the certificate
     boolean certificateEnabled;
 }

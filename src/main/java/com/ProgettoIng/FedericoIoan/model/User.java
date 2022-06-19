@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -16,10 +14,9 @@ import java.util.Set;
 
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Entity
 @Table(name = "users")
 public class User {
 
@@ -65,7 +62,7 @@ public class User {
 	private LocalDateTime dateUpdate;
 
 	/**
-	 * Constructor used during registration
+	 * Constructor used for registration
 	 * @param name
 	 * @param surname
 	 * @param username

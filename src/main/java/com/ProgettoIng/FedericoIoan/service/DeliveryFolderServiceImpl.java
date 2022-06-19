@@ -21,7 +21,7 @@ public class DeliveryFolderServiceImpl implements DeliveryFolderService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public DeliveryFolder createDeliveryFolder(DeliveryFolderDto deliveryFolder) {
+    public DeliveryFolder createDeliveryFolder(Long courseId, DeliveryFolderDto deliveryFolder) {
 
         DeliveryFolder deliveryFolderToCreate = new DeliveryFolder();
 
@@ -30,7 +30,7 @@ public class DeliveryFolderServiceImpl implements DeliveryFolderService {
         deliveryFolderToCreate.setEndDeliveryTime(deliveryFolder.getEndDeliveryTime());
 
         try {
-            Course course = courseRepository.findById(deliveryFolder.getCourseId()).orElseThrow(Exception::new);
+            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
             deliveryFolderToCreate.setCourse(course);
 
             return deliveryFolderRepository.save(deliveryFolderToCreate);
@@ -65,9 +65,6 @@ public class DeliveryFolderServiceImpl implements DeliveryFolderService {
                 deliveryFolderToUpdate.setName(deliveryFolder.getName());
                 deliveryFolderToUpdate.setStartDeliveryTime(deliveryFolder.getStartDeliveryTime());
                 deliveryFolderToUpdate.setEndDeliveryTime(deliveryFolder.getEndDeliveryTime());
-
-                Course course = courseRepository.findById(deliveryFolder.getCourseId()).orElseThrow(Exception::new);
-                deliveryFolderToUpdate.setCourse(course);
 
                 return deliveryFolderRepository.save(deliveryFolderToUpdate);
             } catch (Exception e) {

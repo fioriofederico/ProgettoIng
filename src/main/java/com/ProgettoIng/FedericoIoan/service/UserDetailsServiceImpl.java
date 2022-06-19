@@ -1,7 +1,7 @@
 package com.ProgettoIng.FedericoIoan.service;
 
 import com.ProgettoIng.FedericoIoan.model.User;
-import com.ProgettoIng.FedericoIoan.model.dto.UserDetailsImpl;
+import com.ProgettoIng.FedericoIoan.utils.UserDetailsImpl;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

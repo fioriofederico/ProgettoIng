@@ -4,14 +4,12 @@ import com.ProgettoIng.FedericoIoan.model.ERole;
 import com.ProgettoIng.FedericoIoan.model.Role;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.JwtDto;
-import com.ProgettoIng.FedericoIoan.model.dto.UserDetailsImpl;
 import com.ProgettoIng.FedericoIoan.model.dto.UserLoginDto;
 import com.ProgettoIng.FedericoIoan.model.dto.UserRegistrationDto;
 import com.ProgettoIng.FedericoIoan.repository.RoleRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.AuthService;
 import com.ProgettoIng.FedericoIoan.utils.JwtUtils;
-import com.ProgettoIng.FedericoIoan.utils.SecurityUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Service

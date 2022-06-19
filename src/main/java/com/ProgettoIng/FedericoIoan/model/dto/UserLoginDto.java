@@ -3,6 +3,7 @@ package com.ProgettoIng.FedericoIoan.model.dto;
 import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
+
 @Data
 public class UserLoginDto {
 

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,9 +19,9 @@ public class DeliveryFolderController {
     private DeliveryFolderServiceImpl deliveryFolderService;
 
     @PostMapping
-    public ResponseEntity<?> createDeliveryFolder(@RequestBody DeliveryFolderDto deliveryFolderDto) {
+    public ResponseEntity<?> createDeliveryFolder(Long courseId, @Valid @RequestBody DeliveryFolderDto deliveryFolderDto) {
         try {
-            DeliveryFolder createdDeliveryFolder =deliveryFolderService.createDeliveryFolder(deliveryFolderDto);
+            DeliveryFolder createdDeliveryFolder =deliveryFolderService.createDeliveryFolder(courseId, deliveryFolderDto);
             return ResponseEntity.ok(createdDeliveryFolder);
 
         } catch (Exception e) {
@@ -52,7 +53,7 @@ public class DeliveryFolderController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDeliveryFolder(@PathVariable Long id,
-                                                               @RequestBody DeliveryFolderDto deliveryFolderDto) {
+                                                  @Valid @RequestBody DeliveryFolderDto deliveryFolderDto) {
         try  {
             DeliveryFolder updatedDeliveryFolder = deliveryFolderService.updateDeliveryFolder(id, deliveryFolderDto);
             return ResponseEntity.ok(updatedDeliveryFolder);

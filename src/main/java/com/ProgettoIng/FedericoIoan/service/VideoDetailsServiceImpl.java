@@ -54,21 +54,23 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
             // Get video info from Vimeo
             VimeoResponse videoInfo = vimeo.getVideoInfo(videoEndPoint);
 
-            // Edit video metadata
+/*            // Edit video metadata
             String name = file.getOriginalFilename();
             String description = "Test Description";
             String license = ""; //see Vimeo API Documentation
             String privacyView = "disable"; //see Vimeo API Documentation
             String privacyEmbed = "whitelist"; //see Vimeo API Documentation
             // TODO: fix metadata
-            vimeo.updateVideoMetadata(videoEndPoint, name, description, license, privacyView, privacyEmbed, false);
+            vimeo.updateVideoMetadata(videoEndPoint, name, description, license, privacyView, privacyEmbed, false);*/
 
             // Create VideoDetails object
             VideoDetails videoDetails = new VideoDetails();
 
             // Set video details properties
             videoDetails.setName(file.getOriginalFilename());
+/*
             videoDetails.setDescription(description);
+*/
             videoDetails.setUrl(videoInfo.getJson().getString("link"));
             videoDetails.setEndPointVimeo(videoEndPoint);
 

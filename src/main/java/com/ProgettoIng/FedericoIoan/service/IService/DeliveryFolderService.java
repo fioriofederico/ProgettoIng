@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DeliveryFolderService {
 
-    DeliveryFolder createDeliveryFolder(DeliveryFolderDto deliveryFolder);
+    DeliveryFolder createDeliveryFolder(Long courseId, DeliveryFolderDto deliveryFolder);
 
     List<DeliveryFolder> findDeliveryFolders(Long courseId);
 

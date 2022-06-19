@@ -1,20 +1,17 @@
 package com.ProgettoIng.FedericoIoan.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Entity
 @Table(name = "delivery_folders")
 public class DeliveryFolder {
 

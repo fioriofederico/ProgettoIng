@@ -1,15 +1,11 @@
 package com.ProgettoIng.FedericoIoan.controller;
 
 import com.ProgettoIng.FedericoIoan.model.CourseModule;
-import com.ProgettoIng.FedericoIoan.model.VideoDetails;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseModuleDto;
 import com.ProgettoIng.FedericoIoan.service.CourseModuleServiceImpl;
-import com.ProgettoIng.FedericoIoan.service.VideoDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
