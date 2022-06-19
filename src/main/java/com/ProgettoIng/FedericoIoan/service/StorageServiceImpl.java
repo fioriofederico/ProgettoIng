@@ -31,8 +31,8 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void save(MultipartFile file, String filename) {
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(filename));
-        } catch (IOException | NullPointerException e) {
+
+        } catch (NullPointerException e) {
             throw new RuntimeException("Could not store the file!");
         }
     }

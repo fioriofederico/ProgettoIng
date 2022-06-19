@@ -1,8 +1,10 @@
 package com.ProgettoIng.FedericoIoan.controller;
 
 import com.ProgettoIng.FedericoIoan.model.Assignment;
+import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.ScoreDto;
 import com.ProgettoIng.FedericoIoan.service.AssignmentServiceImpl;
+import com.ProgettoIng.FedericoIoan.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,11 +23,15 @@ public class AssignmentController {
     @Autowired
     private AssignmentServiceImpl assignmentService;
 
+    @Autowired
+    private UserServiceImpl userService;
+
     @PostMapping
     public ResponseEntity<?> createAssignment(@PathVariable Long folderId, @RequestParam("file") MultipartFile file) {
         try {
-            // TODO: get student id from JWT token
-            Long studuntId = Long.valueOf(3);
+            User user = userService.getUserWithAuthorities().get();
+            Long studuntId = user.getId();
+
             Assignment assignment = assignmentService.uploadAssignment(studuntId, folderId, file);
             return ResponseEntity.ok(assignment);
         } catch (Exception e) {

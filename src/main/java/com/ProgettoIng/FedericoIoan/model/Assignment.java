@@ -46,8 +46,6 @@ public class Assignment {
 
     @ManyToOne
     @JoinColumn(name = "student_id")
-    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
     private User student;
 
     @Column(columnDefinition = "TIMESTAMP")
