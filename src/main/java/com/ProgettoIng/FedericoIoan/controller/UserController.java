@@ -1,6 +1,7 @@
 package com.ProgettoIng.FedericoIoan.controller;
 
 import com.ProgettoIng.FedericoIoan.model.User;
+import com.ProgettoIng.FedericoIoan.model.dto.NewPasswordDto;
 import com.ProgettoIng.FedericoIoan.model.dto.UserLoginDto;
 import com.ProgettoIng.FedericoIoan.model.dto.UserRegistrationDto;
 import com.ProgettoIng.FedericoIoan.service.AuthServiceImpl;
@@ -57,10 +58,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update-password/{userId}")
-    public ResponseEntity<?> updatePwd(@PathVariable Long userId, @RequestBody User userDto) {
+    @PutMapping("{userId}/update-password")
+    public ResponseEntity<?> updatePwd(@PathVariable Long userId, @RequestBody NewPasswordDto password) {
         try {
-            User updatedUser = userService.updatePwd(userId, userDto);
+            User updatedUser = userService.updatePwd(userId, password);
             return ResponseEntity.ok(updatedUser);
 
         } catch (Exception e) {

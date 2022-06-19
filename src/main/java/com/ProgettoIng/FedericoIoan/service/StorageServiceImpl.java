@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import com.ProgettoIng.FedericoIoan.service.IService.StorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -58,12 +57,16 @@ public class StorageServiceImpl implements StorageService {
         try {
             Files.delete(root.resolve(filename));
         } catch (IOException e) {
-            throw new RuntimeException("Could not delete the file!");
+            throw new RuntimeException("Could not delete the file");
         }
     }
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(root.toFile());
+        try {
+            FileSystemUtils.deleteRecursively(root.toFile());
+        } catch (Exception e) {
+            throw new RuntimeException("Could not delete the files");
+        }
     }
 }

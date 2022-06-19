@@ -6,10 +6,8 @@ import com.ProgettoIng.FedericoIoan.model.dto.CourseModuleDto;
 import com.ProgettoIng.FedericoIoan.repository.CourseModuleRepository;
 import com.ProgettoIng.FedericoIoan.repository.CourseRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.CourseModuleService;
-import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 
@@ -29,43 +27,28 @@ public class CourseModuleServiceImpl implements CourseModuleService {
         courseModuleToCreate.setName(courseModule.getName());
         courseModuleToCreate.setDescription(courseModule.getDescription());
 
-        try {
-            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
-            courseModuleToCreate.setCourse(course);
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        courseModuleToCreate.setCourse(course);
 
-            return courseModuleRepository.save(courseModuleToCreate);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return courseModuleRepository.save(courseModuleToCreate);
     }
 
     public List<CourseModule> findCourseModules(Long courseId) {
-        try {
-            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
-            return courseModuleRepository.findCourseModulesByCourse(course);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        return courseModuleRepository.findCourseModulesByCourse(course);
     }
 
     public CourseModule findCourseModule(Long id) {
-        try {
-            return courseModuleRepository.findById(id).orElseThrow(Exception::new);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return courseModuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course module not found"));
     }
 
     public CourseModule updateCourseModule(Long id, CourseModuleDto courseModule) {
-        // Check if course module exists
-        if (!courseModuleRepository.existsById(id))
-            throw new RuntimeException("CourseModule with id " + id + " does not exist");
+        CourseModule courseModuleToUpdate = courseModuleRepository.findById(id)
+                .orElseThrow( () -> new RuntimeException("Course module not found"));
 
-        // Get course module to update
-        CourseModule courseModuleToUpdate = courseModuleRepository.findById(id).get();
-
-        // Update course module
         courseModuleToUpdate.setName(courseModule.getName());
         courseModuleToUpdate.setDescription(courseModule.getDescription());
 
@@ -73,12 +56,9 @@ public class CourseModuleServiceImpl implements CourseModuleService {
     }
 
     public CourseModule deleteCourseModule(Long id) {
-        // Check if course module exists
-        if (!courseModuleRepository.existsById(id))
-            throw new RuntimeException("CourseModule with id " + id + " does not exist");
+        CourseModule courseModuleToDelete = courseModuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course module not found"));
 
-        // Delete course module
-        CourseModule courseModuleToDelete = courseModuleRepository.findById(id).get();
         courseModuleRepository.delete(courseModuleToDelete);
         return courseModuleToDelete;
     }

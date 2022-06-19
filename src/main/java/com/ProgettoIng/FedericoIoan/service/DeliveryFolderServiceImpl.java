@@ -8,7 +8,6 @@ import com.ProgettoIng.FedericoIoan.repository.DeliveryFolderRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.DeliveryFolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 
@@ -29,56 +28,41 @@ public class DeliveryFolderServiceImpl implements DeliveryFolderService {
         deliveryFolderToCreate.setStartDeliveryTime(deliveryFolder.getStartDeliveryTime());
         deliveryFolderToCreate.setEndDeliveryTime(deliveryFolder.getEndDeliveryTime());
 
-        try {
-            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
-            deliveryFolderToCreate.setCourse(course);
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
+        deliveryFolderToCreate.setCourse(course);
 
-            return deliveryFolderRepository.save(deliveryFolderToCreate);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return deliveryFolderRepository.save(deliveryFolderToCreate);
     }
 
     public List<DeliveryFolder> findDeliveryFolders(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
 
-        try {
-            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
-            return deliveryFolderRepository.findDeliveryFoldersByCourse(course);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return deliveryFolderRepository.findDeliveryFoldersByCourse(course);
     }
 
     public DeliveryFolder findDeliveryFolder(Long id) {
-        try {
-            return deliveryFolderRepository.findById(id).orElseThrow(Exception::new);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return deliveryFolderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("DeliveryFolder not found"));
     }
 
     public DeliveryFolder updateDeliveryFolder(Long id, DeliveryFolderDto deliveryFolder) {
+        DeliveryFolder deliveryFolderToUpdate = deliveryFolderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("DeliveryFolder not found"));
 
-            try {
-                DeliveryFolder deliveryFolderToUpdate = deliveryFolderRepository.findById(id).orElseThrow(Exception::new);
+        deliveryFolderToUpdate.setName(deliveryFolder.getName());
+        deliveryFolderToUpdate.setStartDeliveryTime(deliveryFolder.getStartDeliveryTime());
+        deliveryFolderToUpdate.setEndDeliveryTime(deliveryFolder.getEndDeliveryTime());
 
-                deliveryFolderToUpdate.setName(deliveryFolder.getName());
-                deliveryFolderToUpdate.setStartDeliveryTime(deliveryFolder.getStartDeliveryTime());
-                deliveryFolderToUpdate.setEndDeliveryTime(deliveryFolder.getEndDeliveryTime());
-
-                return deliveryFolderRepository.save(deliveryFolderToUpdate);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        return deliveryFolderRepository.save(deliveryFolderToUpdate);
     }
 
     public DeliveryFolder deleteDeliveryFolder(Long id) {
-        try {
-            DeliveryFolder deliveryFolderToDelete = deliveryFolderRepository.findById(id).orElseThrow(Exception::new);
-            deliveryFolderRepository.delete(deliveryFolderToDelete);
-            return deliveryFolderToDelete;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        DeliveryFolder deliveryFolderToDelete = deliveryFolderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("DeliveryFolder not found"));
+
+        deliveryFolderRepository.delete(deliveryFolderToDelete);
+        return deliveryFolderToDelete;
     }
 }

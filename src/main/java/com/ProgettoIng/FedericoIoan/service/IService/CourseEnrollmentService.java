@@ -22,5 +22,5 @@ public interface CourseEnrollmentService {
 
     List<Course> findEnrolledCourses(Long userId);
 
-    boolean isEnrolled(Long courseId, Long id);
+    boolean isEnrolled(Long courseId, Long studentId);
 }

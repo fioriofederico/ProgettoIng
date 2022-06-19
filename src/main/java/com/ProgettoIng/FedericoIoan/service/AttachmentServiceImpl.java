@@ -5,7 +5,6 @@ import com.ProgettoIng.FedericoIoan.model.CourseModule;
 import com.ProgettoIng.FedericoIoan.repository.AttachmentRepository;
 import com.ProgettoIng.FedericoIoan.repository.CourseModuleRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.AttachmentService;
-import com.ProgettoIng.FedericoIoan.service.IService.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

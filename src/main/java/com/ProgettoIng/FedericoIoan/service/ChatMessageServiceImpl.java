@@ -1,6 +1,5 @@
 package com.ProgettoIng.FedericoIoan.service;
 
-
 import com.ProgettoIng.FedericoIoan.model.ChatMessage;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.ChatMessageDto;
@@ -9,8 +8,8 @@ import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
 
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService {
@@ -22,51 +21,42 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private UserRepository userRepository;
 
     public List<ChatMessage> findChat(Long senderId, Long receiverId) {
-        try {
-            User sender = userRepository.findById(senderId).orElseThrow(Exception::new);
-            User receiver = userRepository.findById(receiverId).orElseThrow(Exception::new);
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
 
-            return chatMessageRepository.findChatMessagesBySenderAndReceiver(sender, receiver);
+        User receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return chatMessageRepository.findChatMessagesBySenderAndReceiver(sender, receiver);
     }
 
     public ChatMessage findChatMessage(Long id) {
-        try {
-            return chatMessageRepository.findById(id).orElseThrow(Exception::new);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return chatMessageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chat message not found"));
     }
 
     public ChatMessage sendMessage(Long senderId, Long receiverId, ChatMessageDto message) {
-        try {
-            User sender = userRepository.findById(senderId).orElseThrow(Exception::new);
-            User receiver = userRepository.findById(receiverId).orElseThrow(Exception::new);
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
 
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setSender(sender);
-            chatMessage.setReceiver(receiver);
-            chatMessage.setMessage(message.getMessage());
+        User receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
-            return chatMessageRepository.save(chatMessage);
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setSender(sender);
+        chatMessage.setReceiver(receiver);
+        chatMessage.setMessage(message.getMessage());
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return chatMessageRepository.save(chatMessage);
     }
 
     public void deleteChat(Long senderId, Long receiverId) {
-        try {
-            User sender = userRepository.findById(senderId).orElseThrow(Exception::new);
-            User receiver = userRepository.findById(receiverId).orElseThrow(Exception::new);
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
 
-            chatMessageRepository.deleteAllBySenderAndReceiver(sender, receiver);
+        User receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        chatMessageRepository.deleteAllBySenderAndReceiver(sender, receiver);
     }
 }

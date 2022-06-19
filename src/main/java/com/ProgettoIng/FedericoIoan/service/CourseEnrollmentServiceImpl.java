@@ -10,9 +10,7 @@ import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.CourseEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -52,111 +50,107 @@ public class CourseEnrollmentServiceImpl implements CourseEnrollmentService {
     }
 
     public CourseEnrollment unenrollUser(Long courseId, Long userId) {
+        if (!courseRepository.existsById(courseId))
+        throw new RuntimeException("Course not found");
 
-        try {
-            CourseEnrollment courseEnrollment = courseEnrollmentRepository
-                    .findById(new CourseEnrollmentKey(courseId, userId)).orElseThrow(Exception::new);
+        if (!userRepository.existsById(userId))
+            throw new RuntimeException("User not found");
 
-            courseEnrollmentRepository.delete(courseEnrollment);
+        CourseEnrollment courseEnrollment = courseEnrollmentRepository
+                .findById(new CourseEnrollmentKey(courseId, userId))
+                .orElseThrow(() -> new RuntimeException("User is not enrolled in this course"));
 
-            return courseEnrollment;
+        courseEnrollmentRepository.delete(courseEnrollment);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return courseEnrollment;
     }
 
     public CourseEnrollment rateCourse(Long courseId, Long userId, Integer rating) {
-        try {
-            CourseEnrollment courseEnrollment = courseEnrollmentRepository
-                    .findById(new CourseEnrollmentKey(courseId, userId)).orElseThrow(Exception::new);
+        if (!courseRepository.existsById(courseId))
+            throw new RuntimeException("Course not found");
 
-            courseEnrollment.setRating(rating);
-            courseEnrollmentRepository.save(courseEnrollment);
+        if (!userRepository.existsById(userId))
+            throw new RuntimeException("User not found");
 
-            return courseEnrollment;
+        CourseEnrollment courseEnrollment = courseEnrollmentRepository
+                .findById(new CourseEnrollmentKey(courseId, userId))
+                .orElseThrow(() -> new RuntimeException("User is not enrolled in this course"));
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        courseEnrollment.setRating(rating);
+        courseEnrollmentRepository.save(courseEnrollment);
+
+        return courseEnrollment;
     }
 
     public CourseEnrollment enableCertificate(Long courseId, Long userId) {
-        try {
-            CourseEnrollment courseEnrollment = courseEnrollmentRepository
-                    .findById(new CourseEnrollmentKey(courseId, userId)).orElseThrow(Exception::new);
+        if (!courseRepository.existsById(courseId))
+            throw new RuntimeException("Course not found");
 
-            // If certificate is disabled -> enable, otherwise disable
-            courseEnrollment.setCertificateEnabled(!courseEnrollment.isCertificateEnabled());
-            courseEnrollmentRepository.save(courseEnrollment);
+        if (!userRepository.existsById(userId))
+            throw new RuntimeException("User not found");
 
-            return courseEnrollment;
+        CourseEnrollment courseEnrollment = courseEnrollmentRepository
+                .findById(new CourseEnrollmentKey(courseId, userId))
+                .orElseThrow(() -> new RuntimeException("User is not enrolled in this course"));
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        courseEnrollment.setCertificateEnabled(!courseEnrollment.isCertificateEnabled());
+        courseEnrollmentRepository.save(courseEnrollment);
 
+        return courseEnrollment;
     }
 
     public Boolean isUserCertificateEnabled(Long courseId, Long userId) {
-        try {
-            CourseEnrollment courseEnrollment = courseEnrollmentRepository
-                    .findById(new CourseEnrollmentKey(courseId, userId)).orElseThrow(Exception::new);
+        if (!courseRepository.existsById(courseId))
+            throw new RuntimeException("Course not found");
 
-            return courseEnrollment.isCertificateEnabled();
+        if (!userRepository.existsById(userId))
+            throw new RuntimeException("User not found");
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        CourseEnrollment courseEnrollment = courseEnrollmentRepository
+                .findById(new CourseEnrollmentKey(courseId, userId))
+                .orElseThrow(() -> new RuntimeException("User is not enrolled in this course"));
+
+        return courseEnrollment.isCertificateEnabled();
     }
 
     public List<User> findEnrolledUsers(Long courseId) {
-        try {
-            Course course = courseRepository.findById(courseId).orElseThrow(Exception::new);
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
 
-            List<CourseEnrollment> courseEnrollments = courseEnrollmentRepository.findCourseEnrollmentByCourse(course);
-            
-            List<User> enrolledStudents = new ArrayList<User>();
+        List<CourseEnrollment> courseEnrollments = courseEnrollmentRepository.findCourseEnrollmentByCourse(course);
 
-            for (CourseEnrollment courseEnrollment: courseEnrollments) {
-                enrolledStudents.add(courseEnrollment.getStudent());
-            }
+        List<User> enrolledStudents = new ArrayList<>();
 
-            return  enrolledStudents;
+        for (CourseEnrollment courseEnrollment: courseEnrollments)
+            enrolledStudents.add(courseEnrollment.getStudent());
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return  enrolledStudents;
     }
 
     public List<Course> findEnrolledCourses(Long userId) {
-        try {
-            User user = userRepository.findById(userId).orElseThrow(Exception::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
-            List<CourseEnrollment> courseEnrollments = courseEnrollmentRepository.findCourseEnrollmentByStudent(user);
+        List<CourseEnrollment> courseEnrollments = courseEnrollmentRepository.findCourseEnrollmentByStudent(user);
 
-            List<Course> enrolledCourses = new ArrayList<Course>();
+        List<Course> enrolledCourses = new ArrayList<>();
 
-            for (CourseEnrollment courseEnrollment: courseEnrollments) {
-                enrolledCourses.add(courseEnrollment.getCourse());
-            }
+        for (CourseEnrollment courseEnrollment: courseEnrollments)
+            enrolledCourses.add(courseEnrollment.getCourse());
 
-            return  enrolledCourses;
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return  enrolledCourses;
     }
 
-    public boolean isEnrolled(Long courseId, Long id) {
-        try {
-            CourseEnrollment courseEnrollment = courseEnrollmentRepository
-                    .findById(new CourseEnrollmentKey(courseId, id)).orElseThrow(Exception::new);
+    public boolean isEnrolled(Long courseId, Long studentId) {
+        if (!courseRepository.existsById(courseId))
+            throw new RuntimeException("Course not found");
 
-            return true;
+        if (!userRepository.existsById(studentId))
+            throw new RuntimeException("User not found");
 
-        } catch (Exception e) {
-            return false;
-        }
+        CourseEnrollment courseEnrollment = courseEnrollmentRepository
+                .findById(new CourseEnrollmentKey(courseId, studentId))
+                .orElseThrow(() -> new RuntimeException("User is not enrolled in this course"));
+
+        return true;
     }
 }

@@ -6,12 +6,9 @@ import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
 import com.ProgettoIng.FedericoIoan.repository.CourseRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.CourseService;
-import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Objects;
 
 
 @Service
@@ -28,21 +25,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public List<Course> findTutorCourses(Long ownerId) {
-        try {
-            User owner = userRepository.findById(ownerId).orElseThrow(Exception::new);
-            List<Course> courses = courseRepository.findCoursesByOwner(owner);
-            return courses;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        User owner = userRepository.findById(ownerId)
+            .orElseThrow(() -> new RuntimeException("Owner not found"));
+
+        return courseRepository.findCoursesByOwner(owner);
     }
 
     public Course findCourse(Long id) {
-        try {
-            return courseRepository.findById(id).orElseThrow(Exception::new);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
     }
 
     public Course createCourse(CourseDto course) {
@@ -51,25 +41,18 @@ public class CourseServiceImpl implements CourseService {
         courseToCreate.setName(course.getName());
         courseToCreate.setDescription(course.getDescription());
 
-        try {
-            User owner = userRepository.findById(course.getOwnerId()).orElseThrow(Exception::new);
-            courseToCreate.setOwner(owner);
+        User owner = userRepository.findById(course.getOwnerId())
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
 
-            return courseRepository.save(courseToCreate);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        courseToCreate.setOwner(owner);
+
+        return courseRepository.save(courseToCreate);
     }
 
     public Course updateCourse(Long id, CourseDto course) {
-        // Check if the course exists
-        if (!courseRepository.existsById(id))
-            throw new RuntimeException("Course not found");
+        Course courseToUpdate = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        // Get course to update
-        Course courseToUpdate = courseRepository.findById(id).get();
-
-        // Update course
         courseToUpdate.setName(course.getName());
         courseToUpdate.setDescription(course.getDescription());
 
@@ -77,12 +60,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public Course deleteCourse(Long id) {
-        Preconditions.checkArgument(!Objects.isNull(id));
-        if (courseRepository.existsById(id)) {
-            Course courseToDelete = courseRepository.findById(id).get();
-            courseRepository.delete(courseToDelete);
-            return courseToDelete;
-        }
-        return null;
+        Course courseToDelete = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        courseRepository.delete(courseToDelete);
+        return courseToDelete;
     }
 }

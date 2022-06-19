@@ -1,8 +1,6 @@
 package com.ProgettoIng.FedericoIoan.service;
 
 import com.ProgettoIng.FedericoIoan.service.IService.PdfGenerateService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -11,15 +9,14 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+
 @Service
 public class PdfGenerateServiceImpl implements PdfGenerateService {
-    private Logger logger = LoggerFactory.getLogger(PdfGenerateServiceImpl.class);
 
     @Autowired
     private TemplateEngine templateEngine;
@@ -34,7 +31,6 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 
         String htmlContent = templateEngine.process(templateName, context);
         try {
-            // TODO: check next line
             FileOutputStream fileOutputStream = new FileOutputStream(folderPath + "/" + pdfFileName);
 
             ITextRenderer renderer = new ITextRenderer();

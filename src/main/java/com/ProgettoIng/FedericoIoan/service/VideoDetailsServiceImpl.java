@@ -9,7 +9,6 @@ import com.ProgettoIng.FedericoIoan.repository.VideoDetailsRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.VideoDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 import com.clickntap.vimeo.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -81,13 +80,11 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
             return videoDetailsRepository.save(videoDetails);
 
         } catch (IOException | VimeoException e) {
-            e.printStackTrace();
+            // Delete video from subdirectory even if upload failed
+            vimeoStorageService.deleteAll(subDirectory);
+
+            throw new RuntimeException("Could not upload video to Vimeo");
         }
-
-        // Delete video from subdirectory even if upload failed
-        vimeoStorageService.deleteAll(subDirectory);
-
-        return null;
     }
 
     public List<VideoDetails> findVideos(Long courseModuleId) {
@@ -104,12 +101,13 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
     }
 
     public VideoDetails deleteVideo(Long id) {
+        // Get video details
+        VideoDetails videoDetails = videoDetailsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Video not found"));
+
+        String videoEndPoint = videoDetails.getEndPointVimeo();
+
         try {
-
-            // Get video details
-            VideoDetails videoDetails = videoDetailsRepository.findById(id).orElseThrow(Exception::new);
-            String videoEndPoint = videoDetails.getEndPointVimeo();
-
             // Delete video from Vimeo using Vimeo API
             vimeo.removeVideo(videoEndPoint);
 
@@ -118,10 +116,8 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
 
             return videoDetails;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException("Error deleting video from Vimeo");
         }
-
-        return null;
     }
 }

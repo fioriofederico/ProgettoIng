@@ -1,19 +1,17 @@
 package com.ProgettoIng.FedericoIoan.service;
 
-import com.ProgettoIng.FedericoIoan.model.dto.UserLoginDto;
-import com.ProgettoIng.FedericoIoan.model.dto.UserRegistrationDto;
+import com.ProgettoIng.FedericoIoan.model.dto.NewPasswordDto;
 import com.ProgettoIng.FedericoIoan.utils.SecurityUtils;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,29 +19,32 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     public List<User> findUsers(){
         return userRepository.findAll();
     }
 
 
     public User findUser(Long userId) {
-        try {
-            return userRepository.findById(userId).orElseThrow(Exception::new);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
-    public User updatePwd(@PathVariable Long userId, @RequestBody User userDto){
-        User userToUpdate = userRepository.findById(userId).orElseThrow();
-        if(userDto.getPassword()!= null) {
-            userToUpdate.setPassword(userDto.getPassword());
-        }
+    public User updatePwd( Long userId, NewPasswordDto password) {
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        userToUpdate.setPassword(encoder.encode(password.getPassword()));
+
         return userRepository.save(userToUpdate);
     }
 
     public User deleteUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
         userRepository.delete(user);
         return user;
     }

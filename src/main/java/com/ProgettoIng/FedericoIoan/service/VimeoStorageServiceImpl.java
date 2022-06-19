@@ -4,7 +4,6 @@ import com.ProgettoIng.FedericoIoan.service.IService.VimeoStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,7 +50,11 @@ public class VimeoStorageServiceImpl implements VimeoStorageService {
 
     @Override
     public void deleteAll(String subDirectory) {
-        Path subFolder = Paths.get(subDirectory);
-        FileSystemUtils.deleteRecursively(subFolder.toFile());
+        try {
+            Path subFolder = Paths.get(subDirectory);
+            FileSystemUtils.deleteRecursively(subFolder.toFile());
+        } catch (Exception e) {
+            throw new RuntimeException("Could not delete the file. Error: " + e.getMessage());
+        }
     }
 }
