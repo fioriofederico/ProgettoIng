@@ -212,4 +212,6 @@ public class CourseController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
+	// TODO: add get medium rating
 }
