@@ -5,6 +5,7 @@ import com.ProgettoIng.FedericoIoan.service.AttachmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public class AttachmentController {
     private AttachmentServiceImpl attachmentService;
 
     @PostMapping
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> uploadAttachment(@PathVariable Long moduleId,
                                               @RequestParam("file") MultipartFile file) {
         try {
@@ -58,6 +60,7 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteAttachment(@PathVariable Long id) {
         try {
             Attachment attachment = attachmentService.deleteAttachment(id);
