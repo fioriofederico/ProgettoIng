@@ -22,7 +22,6 @@ public class AttachmentController {
     private AttachmentServiceImpl attachmentService;
 
     @PostMapping
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> uploadAttachment(@PathVariable Long moduleId,
                                               @RequestParam("file") MultipartFile file) {
         try {
@@ -60,7 +59,6 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteAttachment(@PathVariable Long id) {
         try {
             Attachment attachment = attachmentService.deleteAttachment(id);

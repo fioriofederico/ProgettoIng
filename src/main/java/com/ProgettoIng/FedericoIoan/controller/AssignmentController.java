@@ -28,7 +28,6 @@ public class AssignmentController {
     private UserServiceImpl userService;
 
     @PostMapping
-    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> createAssignment(@PathVariable Long folderId, @RequestParam("file") MultipartFile file) {
         try {
             User user = userService.getUserWithAuthorities().get();
@@ -67,7 +66,6 @@ public class AssignmentController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteAssignment(@PathVariable Long id) {
         try {
             Assignment assignment = assignmentService.deleteAssignment(id);
@@ -78,7 +76,6 @@ public class AssignmentController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> scoreAssignment(@PathVariable Long id, @Valid @RequestBody ScoreDto score) {
         try {
             Assignment assignment = assignmentService.scoreAssignment(id, score);

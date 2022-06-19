@@ -40,7 +40,6 @@ public class CourseController {
 	private PdfGenerateServiceImpl pdfGenerateService;
 
 	@GetMapping
-	@PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
 	public ResponseEntity<?> getCourses() {
 		try {
 			List<Course> courses = courseService.findCourses();
@@ -52,7 +51,6 @@ public class CourseController {
 	}
 
 	@GetMapping("/manage/{role}")
-	@PreAuthorize("hasRole('STUDENT') or hasRole('TUTOR')")
 	public ResponseEntity<?> getUserCourses(@PathVariable String role) {
 		try {
 			User user = userService.getUserWithAuthorities().get();
@@ -88,7 +86,6 @@ public class CourseController {
 	}
 
 	@PostMapping
-	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> createCourse(@Valid @RequestBody CourseDto course) {
 		try {
 			Course createdCourse = courseService.createCourse(course);
@@ -100,7 +97,6 @@ public class CourseController {
 	}
 
 	@PutMapping("/{courseId}")
-	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> updateCourse(@PathVariable Long courseId, @Valid @RequestBody CourseDto course) {
 		try {
 			Course updatedCourse = courseService.updateCourse(courseId, course);
@@ -112,7 +108,6 @@ public class CourseController {
 	}
 
 	@DeleteMapping("/{courseId}")
-	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteCourse(@PathVariable Long courseId) {
 		try {
 			Course deletedCourse = courseService.deleteCourse(courseId);
@@ -124,7 +119,6 @@ public class CourseController {
 	}
 
 	@GetMapping("{courseId}/certificate")
-	@PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
 	public ResponseEntity<?> getCertificate(@PathVariable Long courseId) {
 		try {
 			Map<String, Object> certificateData = new HashMap<>();
@@ -161,7 +155,6 @@ public class CourseController {
 	}
 
 	@PostMapping("{courseId}/enroll/{userId}")
-	@PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
 	public ResponseEntity<?> enrollUserToCourse(@PathVariable Long courseId, @PathVariable Long userId) {
 		try {
 			CourseEnrollment courseEnrollment = courseEnrollmentService.enrollUser(courseId, userId);
@@ -173,7 +166,6 @@ public class CourseController {
 	}
 
 	@DeleteMapping("{courseId}/unenroll/{userId}")
-	@PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
 	public ResponseEntity<?> unenrollUserToCourse(@PathVariable Long courseId, @PathVariable Long userId) {
 		try {
 			CourseEnrollment courseEnrollment = courseEnrollmentService.unenrollUser(courseId, userId);
@@ -185,7 +177,6 @@ public class CourseController {
 	}
 
 	@PostMapping("{courseId}/rate")
-	@PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
 	public ResponseEntity<?> rateCourse(@PathVariable Long courseId, @Valid @RequestBody RatingDto rating) {
 		try {
 			User student = userService.getUserWithAuthorities().orElseThrow(Exception::new);
@@ -201,7 +192,6 @@ public class CourseController {
 	}
 
 	@PostMapping("{courseId}/enable_certificate/{userId}")
-	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> enableCertificate(@PathVariable Long courseId, @PathVariable Long userId) {
 		try {
 			CourseEnrollment courseEnrollment = courseEnrollmentService.enableCertificate(courseId, userId);
@@ -213,7 +203,6 @@ public class CourseController {
 	}
 
 	@GetMapping("{courseId}/students")
-	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> getEnrolledStudents(@PathVariable Long courseId) {
 		try {
 			List<User> students = courseEnrollmentService.findEnrolledUsers(courseId);

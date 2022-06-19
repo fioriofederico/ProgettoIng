@@ -37,17 +37,6 @@ public class ChatMessageController {
         }
     }
 
-/*    @GetMapping("/{messageId}")
-    public ResponseEntity<?> getChatMessage(@PathVariable Long messageId) {
-        try {
-            ChatMessage message = chatMessageService.findChatMessage(messageId);
-
-            return ResponseEntity.ok(message);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }*/
-
     @PostMapping("/message/{receiverId}")
     public ResponseEntity<?> sendMessage(@PathVariable Long receiverId,
                                          @Valid @RequestBody ChatMessageDto chatMessageDto) {

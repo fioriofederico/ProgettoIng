@@ -22,7 +22,6 @@ public class CourseModuleController {
     private CourseModuleServiceImpl courseModuleService;
 
     @PostMapping
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> createCourseModule(@PathVariable Long courseId,
                                                 @Valid @RequestBody CourseModuleDto courseModule) {
         try {
@@ -57,7 +56,6 @@ public class CourseModuleController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updateCourseModule(@PathVariable Long id,
                                                            @Valid @RequestBody CourseModuleDto courseModule) {
         try {
@@ -70,7 +68,6 @@ public class CourseModuleController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteCourseModule(@PathVariable Long id) {
         try {
             CourseModule deletedCourseModule = courseModuleService.deleteCourseModule(id);

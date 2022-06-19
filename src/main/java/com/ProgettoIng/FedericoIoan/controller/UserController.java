@@ -25,7 +25,6 @@ public class UserController {
     private AuthServiceImpl authService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDto user) {
         try {
             User registeredUser = authService.registerUser(user);
@@ -70,7 +69,6 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {
 			User deleteUser = userService.deleteUser(userId);

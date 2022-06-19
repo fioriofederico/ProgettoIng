@@ -18,7 +18,6 @@ public class DeliveryFolderController {
     private DeliveryFolderServiceImpl deliveryFolderService;
 
     @PostMapping
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> createDeliveryFolder(@RequestBody DeliveryFolderDto deliveryFolderDto) {
         try {
             DeliveryFolder createdDeliveryFolder =deliveryFolderService.createDeliveryFolder(deliveryFolderDto);
@@ -52,7 +51,6 @@ public class DeliveryFolderController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updateDeliveryFolder(@PathVariable Long id,
                                                                @RequestBody DeliveryFolderDto deliveryFolderDto) {
         try  {
@@ -65,7 +63,6 @@ public class DeliveryFolderController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteDeliveryFolder(@PathVariable Long id) {
         try {
             DeliveryFolder deletedDeliveryFolder = deliveryFolderService.deleteDeliveryFolder(id);
