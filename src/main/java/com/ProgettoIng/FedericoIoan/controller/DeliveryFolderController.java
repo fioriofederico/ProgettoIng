@@ -5,6 +5,7 @@ import com.ProgettoIng.FedericoIoan.model.dto.DeliveryFolderDto;
 import com.ProgettoIng.FedericoIoan.service.DeliveryFolderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class DeliveryFolderController {
     private DeliveryFolderServiceImpl deliveryFolderService;
 
     @PostMapping
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> createDeliveryFolder(@RequestBody DeliveryFolderDto deliveryFolderDto) {
         try {
             DeliveryFolder createdDeliveryFolder =deliveryFolderService.createDeliveryFolder(deliveryFolderDto);
@@ -50,6 +52,7 @@ public class DeliveryFolderController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updateDeliveryFolder(@PathVariable Long id,
                                                                @RequestBody DeliveryFolderDto deliveryFolderDto) {
         try  {
@@ -62,6 +65,7 @@ public class DeliveryFolderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteDeliveryFolder(@PathVariable Long id) {
         try {
             DeliveryFolder deletedDeliveryFolder = deliveryFolderService.deleteDeliveryFolder(id);

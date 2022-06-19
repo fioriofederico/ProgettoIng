@@ -1,11 +1,16 @@
 package com.ProgettoIng.FedericoIoan.controller;
 
 import com.ProgettoIng.FedericoIoan.model.User;
+import com.ProgettoIng.FedericoIoan.model.dto.UserLoginDto;
+import com.ProgettoIng.FedericoIoan.model.dto.UserRegistrationDto;
+import com.ProgettoIng.FedericoIoan.service.AuthServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -15,6 +20,21 @@ public class UserController {
 
     @Autowired
     UserServiceImpl userService;
+
+    @Autowired
+    private AuthServiceImpl authService;
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDto user) {
+        try {
+            User registeredUser = authService.registerUser(user);
+            return ResponseEntity.ok(registeredUser);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping
     public ResponseEntity<?> getUser() {
@@ -50,6 +70,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {
 			User deleteUser = userService.deleteUser(userId);
@@ -60,8 +81,7 @@ public class UserController {
 		}
     }
 
-    // TODO: delete this method
-
+    // TODO: delete this method before submitting the project
     @GetMapping("/identify")
     public ResponseEntity<User> getActualUser() {
         return ResponseEntity.ok(userService.getUserWithAuthorities().get());

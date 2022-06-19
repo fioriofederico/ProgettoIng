@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public class AssignmentController {
     private UserServiceImpl userService;
 
     @PostMapping
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> createAssignment(@PathVariable Long folderId, @RequestParam("file") MultipartFile file) {
         try {
             User user = userService.getUserWithAuthorities().get();
@@ -65,6 +67,7 @@ public class AssignmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteAssignment(@PathVariable Long id) {
         try {
             Assignment assignment = assignmentService.deleteAssignment(id);
@@ -75,6 +78,7 @@ public class AssignmentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> scoreAssignment(@PathVariable Long id, @Valid @RequestBody ScoreDto score) {
         try {
             Assignment assignment = assignmentService.scoreAssignment(id, score);
