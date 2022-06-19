@@ -24,7 +24,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("${federicoIoan.pdf.directory}")
+    @Value("${federico_ioan.pdf.directory}")
     private String folderPath;
 
     @Override
