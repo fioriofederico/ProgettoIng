@@ -180,7 +180,7 @@ public class CourseController {
 	@PostMapping("{courseId}/rate")
 	public ResponseEntity<?> rateCourse(@PathVariable Long courseId, @Valid @RequestBody RatingDto rating) {
 		try {
-			User student = userService.getUserWithAuthorities().orElseThrow(Exception::new);
+			User student = userService.getUserWithAuthorities().get();
 
 			CourseEnrollment courseEnrollment = courseEnrollmentService
 					.rateCourse(courseId, student.getId(), rating.getRating());

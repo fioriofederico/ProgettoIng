@@ -19,7 +19,7 @@ public class DeliveryFolderController {
     private DeliveryFolderServiceImpl deliveryFolderService;
 
     @PostMapping
-    public ResponseEntity<?> createDeliveryFolder(Long courseId, @Valid @RequestBody DeliveryFolderDto deliveryFolderDto) {
+    public ResponseEntity<?> createDeliveryFolder(@PathVariable Long courseId, @Valid @RequestBody DeliveryFolderDto deliveryFolderDto) {
         try {
             DeliveryFolder createdDeliveryFolder =deliveryFolderService.createDeliveryFolder(courseId, deliveryFolderDto);
             return ResponseEntity.ok(createdDeliveryFolder);
