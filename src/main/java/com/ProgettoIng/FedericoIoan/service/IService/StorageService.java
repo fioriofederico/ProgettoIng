@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface StorageService {
 
-    void init();
+    void StorageService();
 
     void save(MultipartFile file, String filename);
 

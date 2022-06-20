@@ -19,9 +19,11 @@ public class StorageServiceImpl implements StorageService {
     private final Path root = Paths.get("uploads");
 
     @Override
-    public void init() {
+    public void StorageService() {
         try {
-            Files.createDirectory(root);
+            if (!Files.exists(root)) {
+                Files.createDirectory(root);
+            }
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
@@ -30,7 +32,6 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void save(MultipartFile file, String filename) {
         try {
-            // save file to uploads folder
             Files.copy(file.getInputStream(), root.resolve(filename));
 
         } catch (NullPointerException | IOException e) {
