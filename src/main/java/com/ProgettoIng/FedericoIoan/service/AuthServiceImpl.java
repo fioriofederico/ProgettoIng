@@ -46,16 +46,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-/*        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());*/
-
         User user = userRepository.findOneWithAuthoritiesByUsername(loginRequest.getUsername()).get();
-
-/*
-        return new JwtDto(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles);
-*/
 
         return new JwtDto(jwt, user.getId(), user.getUsername(), user.getEmail(), user.getRoles());
 
@@ -88,19 +79,19 @@ public class AuthServiceImpl implements AuthService {
         strRoles.forEach(role -> {
             switch (role) {
                 case "admin":
-                    Role adminRole = roleRepository.findByName(ERole.ADMIN)
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     roles.add(adminRole);
 
                     break;
                 case "tutor":
-                    Role modRole = roleRepository.findByName(ERole.TUTOR)
+                    Role modRole = roleRepository.findByName(ERole.ROLE_TUTOR)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     roles.add(modRole);
 
                     break;
                 case "student":
-                    Role userRole = roleRepository.findByName(ERole.STUDENT)
+                    Role userRole = roleRepository.findByName(ERole.ROLE_STUDENT)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     roles.add(userRole);
 
