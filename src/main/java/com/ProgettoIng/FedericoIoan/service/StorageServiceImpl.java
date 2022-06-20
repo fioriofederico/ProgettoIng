@@ -30,8 +30,9 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void save(MultipartFile file, String filename) {
         try {
-
-        } catch (NullPointerException e) {
+            // save file to uploads folder
+            Files.copy(file.getInputStream(), root.resolve(filename));
+        } catch (NullPointerException | IOException e) {
             throw new RuntimeException("Could not store the file!");
         }
     }
