@@ -32,6 +32,7 @@ public class StorageServiceImpl implements StorageService {
         try {
             // save file to uploads folder
             Files.copy(file.getInputStream(), root.resolve(filename));
+
         } catch (NullPointerException | IOException e) {
             throw new RuntimeException("Could not store the file!");
         }
@@ -48,6 +49,7 @@ public class StorageServiceImpl implements StorageService {
             } else {
                 throw new RuntimeException("Could not read the file!");
             }
+
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
@@ -57,6 +59,7 @@ public class StorageServiceImpl implements StorageService {
     public void delete(String filename) {
         try {
             Files.delete(root.resolve(filename));
+
         } catch (IOException e) {
             throw new RuntimeException("Could not delete the file");
         }
@@ -66,6 +69,7 @@ public class StorageServiceImpl implements StorageService {
     public void deleteAll() {
         try {
             FileSystemUtils.deleteRecursively(root.toFile());
+
         } catch (Exception e) {
             throw new RuntimeException("Could not delete the files");
         }
