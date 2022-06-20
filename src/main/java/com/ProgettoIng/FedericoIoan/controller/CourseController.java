@@ -5,6 +5,7 @@ import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
 import com.ProgettoIng.FedericoIoan.model.Role;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
+import com.ProgettoIng.FedericoIoan.model.dto.EnrolledUserDto;
 import com.ProgettoIng.FedericoIoan.model.dto.RatingDto;
 import com.ProgettoIng.FedericoIoan.service.CourseEnrollmentServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.CourseServiceImpl;
@@ -205,7 +206,7 @@ public class CourseController {
 	@GetMapping("{courseId}/students")
 	public ResponseEntity<?> getEnrolledStudents(@PathVariable Long courseId) {
 		try {
-			List<User> students = courseEnrollmentService.findEnrolledUsers(courseId);
+			List<EnrolledUserDto> students = courseEnrollmentService.findEnrolledUsers(courseId);
 			return ResponseEntity.ok(students);
 
 		} catch (Exception e) {

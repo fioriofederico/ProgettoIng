@@ -2,15 +2,12 @@ package com.ProgettoIng.FedericoIoan.controller;
 
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.NewPasswordDto;
-import com.ProgettoIng.FedericoIoan.model.dto.UserLoginDto;
 import com.ProgettoIng.FedericoIoan.model.dto.UserRegistrationDto;
 import com.ProgettoIng.FedericoIoan.service.AuthServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 

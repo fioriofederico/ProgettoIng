@@ -4,6 +4,7 @@ import com.ProgettoIng.FedericoIoan.model.Course;
 import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
 import com.ProgettoIng.FedericoIoan.model.CourseEnrollmentKey;
 import com.ProgettoIng.FedericoIoan.model.User;
+import com.ProgettoIng.FedericoIoan.model.dto.EnrolledUserDto;
 import com.ProgettoIng.FedericoIoan.repository.CourseEnrollmentRepository;
 import com.ProgettoIng.FedericoIoan.repository.CourseRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;
@@ -113,16 +114,27 @@ public class CourseEnrollmentServiceImpl implements CourseEnrollmentService {
         return courseEnrollment.isCertificateEnabled();
     }
 
-    public List<User> findEnrolledUsers(Long courseId) {
+    public List<EnrolledUserDto> findEnrolledUsers(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
         List<CourseEnrollment> courseEnrollments = courseEnrollmentRepository.findCourseEnrollmentByCourse(course);
 
-        List<User> enrolledStudents = new ArrayList<>();
+        List<EnrolledUserDto> enrolledStudents = new ArrayList<>();
 
-        for (CourseEnrollment courseEnrollment: courseEnrollments)
-            enrolledStudents.add(courseEnrollment.getStudent());
+        for (CourseEnrollment courseEnrollment: courseEnrollments) {
+            User student = courseEnrollment.getStudent();
+            EnrolledUserDto enrolledUserDto = new EnrolledUserDto();
+
+            enrolledUserDto.setId(student.getId());
+            enrolledUserDto.setName(student.getName());
+            enrolledUserDto.setSurname(student.getSurname());
+            enrolledUserDto.setUsername(student.getUsername());
+            enrolledUserDto.setEmail(student.getEmail());
+            enrolledUserDto.setCertificateEnabled(courseEnrollment.isCertificateEnabled());
+
+            enrolledStudents.add(enrolledUserDto);
+        }
 
         return  enrolledStudents;
     }
