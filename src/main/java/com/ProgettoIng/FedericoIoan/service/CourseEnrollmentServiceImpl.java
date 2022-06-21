@@ -4,7 +4,6 @@ import com.ProgettoIng.FedericoIoan.model.Course;
 import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
 import com.ProgettoIng.FedericoIoan.model.CourseEnrollmentKey;
 import com.ProgettoIng.FedericoIoan.model.User;
-import com.ProgettoIng.FedericoIoan.model.dto.EnrolledUserDto;
 import com.ProgettoIng.FedericoIoan.repository.CourseEnrollmentRepository;
 import com.ProgettoIng.FedericoIoan.repository.CourseRepository;
 import com.ProgettoIng.FedericoIoan.repository.UserRepository;

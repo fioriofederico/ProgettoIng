@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -32,6 +34,9 @@ public class Course {
 	@JsonIgnore
 	Set<CourseEnrollment> enrolledUsers;
 
+
+	@Formula("(SELECT AVG(course_enrollments.rating) FROM course_enrollments WHERE course_enrollments.course_id = id )")
+	private Float averageRating;
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime dateInsert;

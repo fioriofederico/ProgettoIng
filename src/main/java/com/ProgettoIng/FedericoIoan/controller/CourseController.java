@@ -5,7 +5,6 @@ import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
 import com.ProgettoIng.FedericoIoan.model.Role;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
-import com.ProgettoIng.FedericoIoan.model.dto.EnrolledUserDto;
 import com.ProgettoIng.FedericoIoan.model.dto.RatingDto;
 import com.ProgettoIng.FedericoIoan.service.CourseEnrollmentServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.CourseServiceImpl;
@@ -15,14 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/courses")
