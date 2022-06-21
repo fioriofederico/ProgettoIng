@@ -2,6 +2,7 @@ package com.ProgettoIng.FedericoIoan.service.IService;
 
 import com.ProgettoIng.FedericoIoan.model.Course;
 import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
+import com.ProgettoIng.FedericoIoan.model.dto.EnrolledUserDto;
 
 import java.util.List;
 

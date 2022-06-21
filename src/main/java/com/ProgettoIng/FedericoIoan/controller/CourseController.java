@@ -5,6 +5,7 @@ import com.ProgettoIng.FedericoIoan.model.CourseEnrollment;
 import com.ProgettoIng.FedericoIoan.model.Role;
 import com.ProgettoIng.FedericoIoan.model.User;
 import com.ProgettoIng.FedericoIoan.model.dto.CourseDto;
+import com.ProgettoIng.FedericoIoan.model.dto.EnrolledUserDto;
 import com.ProgettoIng.FedericoIoan.model.dto.RatingDto;
 import com.ProgettoIng.FedericoIoan.service.CourseEnrollmentServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.CourseServiceImpl;
