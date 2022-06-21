@@ -37,7 +37,7 @@ public class ChatMessageController {
         }
     }
 
-    @PostMapping("/message/{receiverId}")
+    @PostMapping("/{receiverId}")
     public ResponseEntity<?> sendMessage(@PathVariable Long receiverId,
                                          @Valid @RequestBody ChatMessageDto chatMessageDto) {
         try {
@@ -53,7 +53,7 @@ public class ChatMessageController {
     }
 
     @DeleteMapping("/{receiverId}")
-    public ResponseEntity<?> sendMessage(@PathVariable Long receiverId) {
+    public ResponseEntity<?> deleteMessage(@PathVariable Long receiverId) {
         try {
             User sender = userService.getUserWithAuthorities().get();
 
