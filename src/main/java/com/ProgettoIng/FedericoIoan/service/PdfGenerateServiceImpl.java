@@ -41,7 +41,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 
             Path file = Paths.get(folderPath).resolve(pdfFileName);
 
-            // TODO: delete certificate file after download
+            file.toFile().deleteOnExit();
 
             return new UrlResource(file.toUri());
 

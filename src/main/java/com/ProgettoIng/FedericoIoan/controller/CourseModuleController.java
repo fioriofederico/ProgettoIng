@@ -5,6 +5,7 @@ import com.ProgettoIng.FedericoIoan.model.dto.CourseModuleDto;
 import com.ProgettoIng.FedericoIoan.service.CourseModuleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ public class CourseModuleController {
     private CourseModuleServiceImpl courseModuleService;
 
     @PostMapping
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> createCourseModule(@PathVariable Long courseId,
                                                 @Valid @RequestBody CourseModuleDto courseModule) {
         try {
@@ -52,6 +54,7 @@ public class CourseModuleController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updateCourseModule(@PathVariable Long id,
                                                            @Valid @RequestBody CourseModuleDto courseModule) {
         try {
@@ -64,6 +67,7 @@ public class CourseModuleController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteCourseModule(@PathVariable Long id) {
         try {
             CourseModule deletedCourseModule = courseModuleService.deleteCourseModule(id);

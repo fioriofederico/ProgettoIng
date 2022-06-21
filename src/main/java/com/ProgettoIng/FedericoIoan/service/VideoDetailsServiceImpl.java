@@ -53,27 +53,16 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
             // Get video info from Vimeo
             VimeoResponse videoInfo = vimeo.getVideoInfo(videoEndPoint);
 
-/*            // Edit video metadata
-            String name = file.getOriginalFilename();
-            String description = "Test Description";
-            String license = ""; //see Vimeo API Documentation
-            String privacyView = "disable"; //see Vimeo API Documentation
-            String privacyEmbed = "whitelist"; //see Vimeo API Documentation
-            // TODO: fix metadata
-            vimeo.updateVideoMetadata(videoEndPoint, name, description, license, privacyView, privacyEmbed, false);*/
-
             // Create VideoDetails object
             VideoDetails videoDetails = new VideoDetails();
 
             // Set video details properties
             videoDetails.setName(file.getOriginalFilename());
-/*
-            videoDetails.setDescription(description);
-*/
             videoDetails.setUrl(videoInfo.getJson().getString("link"));
             videoDetails.setEndPointVimeo(videoEndPoint);
 
-            CourseModule courseModule = courseModuleRepository.findById(courseModuleId).get();
+            CourseModule courseModule = courseModuleRepository.findById(courseModuleId)
+                    .orElseThrow(() -> new IllegalArgumentException("Course module not found"));
             videoDetails.setCourseModule(courseModule);
 
             // Save video details
@@ -91,13 +80,14 @@ public class VideoDetailsServiceImpl implements VideoDetailsService {
         if(!courseModuleRepository.existsById(courseModuleId))
             throw new IllegalArgumentException("Course module not found");
 
-        CourseModule courseModule = courseModuleRepository.findById(courseModuleId).get();
+        CourseModule courseModule = courseModuleRepository.findById(courseModuleId)
+                .orElseThrow(() -> new IllegalArgumentException("Course module not found"));
 
         return videoDetailsRepository.findByCourseModule(courseModule);
     }
 
     public VideoDetails findVideo(Long id) {
-        return videoDetailsRepository.findById(id).get();
+        return videoDetailsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Video not found"));
     }
 
     public VideoDetails deleteVideo(Long id) {

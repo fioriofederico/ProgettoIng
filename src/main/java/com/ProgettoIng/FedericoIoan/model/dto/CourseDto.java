@@ -16,7 +16,6 @@ public class CourseDto {
     @Size(min = 3, max = 255)
     private String description;
 
-    // TODO: get owner from session ?
     @NotNull
     private Long ownerId;
 }

@@ -7,6 +7,7 @@ import com.ProgettoIng.FedericoIoan.service.AuthServiceImpl;
 import com.ProgettoIng.FedericoIoan.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -23,6 +24,7 @@ public class UserController {
     private AuthServiceImpl authService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDto user) {
         try {
             User registeredUser = authService.registerUser(user);
@@ -56,6 +58,7 @@ public class UserController {
     }
 
     @PutMapping("{userId}/update-password")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatePwd(@PathVariable Long userId, @RequestBody NewPasswordDto password) {
         try {
             User updatedUser = userService.updatePwd(userId, password);
@@ -67,6 +70,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {
 			User deleteUser = userService.deleteUser(userId);
@@ -77,9 +81,13 @@ public class UserController {
 		}
     }
 
-    // TODO: delete this method before submitting the project
     @GetMapping("/identify")
-    public ResponseEntity<User> getActualUser() {
-        return ResponseEntity.ok(userService.getUserWithAuthorities().get());
+    public ResponseEntity<?> getActualUser() {
+        try {
+            return ResponseEntity.ok(userService.getUserWithAuthorities()
+                    .orElseThrow(() -> new IllegalArgumentException("User not found")));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

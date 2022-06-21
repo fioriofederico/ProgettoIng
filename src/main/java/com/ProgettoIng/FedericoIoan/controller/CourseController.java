@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ public class CourseController {
 	private PdfGenerateServiceImpl pdfGenerateService;
 
 	@GetMapping
+	@PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
 	public ResponseEntity<?> getCourses() {
 		try {
 			List<Course> courses = courseService.findCourses();
@@ -50,9 +53,11 @@ public class CourseController {
 	}
 
 	@GetMapping("/manage/{role}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TUTOR')")
 	public ResponseEntity<?> getUserCourses(@PathVariable String role) {
 		try {
-			User user = userService.getUserWithAuthorities().get();
+			User user = userService.getUserWithAuthorities()
+					.orElseThrow(() -> new IllegalArgumentException("User not found"));
 
 			if (! user.getRoles().contains(Role.valueOf(role)))
 				return ResponseEntity.badRequest().body("User is not " + role);
@@ -85,6 +90,7 @@ public class CourseController {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> createCourse(@Valid @RequestBody CourseDto course) {
 		try {
 			Course createdCourse = courseService.createCourse(course);
@@ -96,6 +102,7 @@ public class CourseController {
 	}
 
 	@PutMapping("/{courseId}")
+	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> updateCourse(@PathVariable Long courseId, @Valid @RequestBody CourseDto course) {
 		try {
 			Course updatedCourse = courseService.updateCourse(courseId, course);
@@ -107,6 +114,7 @@ public class CourseController {
 	}
 
 	@DeleteMapping("/{courseId}")
+	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteCourse(@PathVariable Long courseId) {
 		try {
 			Course deletedCourse = courseService.deleteCourse(courseId);
@@ -118,12 +126,14 @@ public class CourseController {
 	}
 
 	@GetMapping("{courseId}/certificate")
+	@PreAuthorize("hasRole('STUDENT')")
 	public ResponseEntity<?> getCertificate(@PathVariable Long courseId) {
 		try {
 			Map<String, Object> certificateData = new HashMap<>();
 
 			Course course = courseService.findCourse(courseId);
-			User student = userService.getUserWithAuthorities().get();
+			User student = userService.getUserWithAuthorities()
+					.orElseThrow(() -> new IllegalArgumentException("User not found"));
 
 			// Check if user is enrolled in the course
 			if (! courseEnrollmentService.isEnrolled(courseId, student.getId()))
@@ -176,9 +186,11 @@ public class CourseController {
 	}
 
 	@PostMapping("{courseId}/rate")
+	@PreAuthorize("hasRole('STUDENT')")
 	public ResponseEntity<?> rateCourse(@PathVariable Long courseId, @Valid @RequestBody RatingDto rating) {
 		try {
-			User student = userService.getUserWithAuthorities().get();
+			User student = userService.getUserWithAuthorities()
+					.orElseThrow(() -> new IllegalArgumentException("User not found"));
 
 			CourseEnrollment courseEnrollment = courseEnrollmentService
 					.rateCourse(courseId, student.getId(), rating.getRating());
@@ -191,6 +203,7 @@ public class CourseController {
 	}
 
 	@PostMapping("{courseId}/enable_certificate/{userId}")
+	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> enableCertificate(@PathVariable Long courseId, @PathVariable Long userId) {
 		try {
 			CourseEnrollment courseEnrollment = courseEnrollmentService.enableCertificate(courseId, userId);
@@ -202,6 +215,7 @@ public class CourseController {
 	}
 
 	@GetMapping("{courseId}/students")
+	@PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> getEnrolledStudents(@PathVariable Long courseId) {
 		try {
 			List<EnrolledUserDto> students = courseEnrollmentService.findEnrolledUsers(courseId);
@@ -211,6 +225,4 @@ public class CourseController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-
-	// TODO: add get medium rating
 }

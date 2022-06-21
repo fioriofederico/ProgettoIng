@@ -4,6 +4,7 @@ import com.ProgettoIng.FedericoIoan.model.VideoDetails;
 import com.ProgettoIng.FedericoIoan.service.VideoDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,7 @@ public class VideoController {
     private VideoDetailsServiceImpl videoDetailsService;
 
     @PostMapping
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> uploadVideo(@PathVariable Long moduleId, @RequestParam("file") MultipartFile file) {
         try {
             VideoDetails videoDetails = videoDetailsService.uploadVideo(moduleId, file);
@@ -51,6 +53,7 @@ public class VideoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteVideo(@PathVariable Long id) {
         try {
             VideoDetails videoDetails = videoDetailsService.deleteVideo(id);

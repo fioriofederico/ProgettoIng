@@ -28,9 +28,11 @@ public class AssignmentController {
     private UserServiceImpl userService;
 
     @PostMapping
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> createAssignment(@PathVariable Long folderId, @RequestParam("file") MultipartFile file) {
         try {
-            User user = userService.getUserWithAuthorities().get();
+            User user = userService.getUserWithAuthorities()
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
             Long studuntId = user.getId();
 
             Assignment assignment = assignmentService.uploadAssignment(studuntId, folderId, file);
@@ -41,6 +43,7 @@ public class AssignmentController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> getAllAssignments(@PathVariable Long folderId) {
         try {
             List<Assignment> assignments = assignmentService.findAllAssignments(folderId);
@@ -51,6 +54,7 @@ public class AssignmentController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> getAssignment(@PathVariable Long id) {
         try {
             Assignment assignmentDetails = assignmentService.findAssignment(id);
@@ -66,6 +70,7 @@ public class AssignmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteAssignment(@PathVariable Long id) {
         try {
             Assignment assignment = assignmentService.deleteAssignment(id);
@@ -76,6 +81,7 @@ public class AssignmentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> scoreAssignment(@PathVariable Long id, @Valid @RequestBody ScoreDto score) {
         try {
             Assignment assignment = assignmentService.scoreAssignment(id, score);
