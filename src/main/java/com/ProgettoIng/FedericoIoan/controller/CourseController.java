@@ -124,21 +124,19 @@ public class CourseController {
 		}
 	}
 
-	@GetMapping("{courseId}/certificate")
-	@PreAuthorize("hasRole('STUDENT')")
-	public ResponseEntity<?> getCertificate(@PathVariable Long courseId) {
+	@GetMapping("/{courseId}/certificate/{userId}")
+	public ResponseEntity<?> getCertificate(@PathVariable Long courseId, @PathVariable Long userId) {
 		try {
 			Map<String, Object> certificateData = new HashMap<>();
 
 			Course course = courseService.findCourse(courseId);
-			User student = userService.getUserWithAuthorities()
-					.orElseThrow(() -> new IllegalArgumentException("User not found"));
+			User student = userService.findUser(userId);
 
 			// Check if user is enrolled in the course
-			if (! courseEnrollmentService.isEnrolled(courseId, student.getId()))
+			if (! courseEnrollmentService.isEnrolled(courseId, userId))
 				return ResponseEntity.badRequest().body("User is not enrolled in the course");
 
-			if (!courseEnrollmentService.isUserCertificateEnabled(courseId, student.getId()))
+			if (!courseEnrollmentService.isUserCertificateEnabled(courseId, userId))
 				return ResponseEntity.badRequest()
 						.body("Certificate is not available, ask to the course owner for permission");
 

@@ -54,7 +54,6 @@ public class AssignmentController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> getAssignment(@PathVariable Long id) {
         try {
             Assignment assignmentDetails = assignmentService.findAssignment(id);
