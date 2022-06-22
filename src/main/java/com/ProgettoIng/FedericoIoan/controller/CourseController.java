@@ -52,25 +52,24 @@ public class CourseController {
 		}
 	}
 
-	@GetMapping("/manage/{role}")
-	@PreAuthorize("hasRole('STUDENT') or hasRole('TUTOR')")
-	public ResponseEntity<?> getUserCourses(@PathVariable String role) {
+	@GetMapping("/manage")
+	public ResponseEntity<?> getUserCourses() {
 		try {
 			User user = userService.getUserWithAuthorities()
 					.orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-			if (! user.getRoles().contains(Role.valueOf(role)))
-				return ResponseEntity.badRequest().body("User is not " + role);
+			Role role = user.getRoles().iterator().next();
+			String roleName = role.getName().name();
 
-			switch (role) {
-				case "tutor":
+			switch (roleName) {
+				case "ROLE_TUTOR":
 					List<Course> ownedCourses = courseService.findTutorCourses(user.getId());
 					return ResponseEntity.ok(ownedCourses);
-				case "student":
+				case "ROLE_STUDENT":
 					List<Course> enrolledCourses = courseEnrollmentService.findEnrolledCourses(user.getId());
 					return ResponseEntity.ok(enrolledCourses);
 				default:
-					return ResponseEntity.badRequest().body("Selected role does not exist");
+					return ResponseEntity.badRequest().body("Current user has no course to manage");
 			}
 
 		} catch (Exception e) {
