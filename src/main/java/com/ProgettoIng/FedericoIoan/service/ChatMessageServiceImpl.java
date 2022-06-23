@@ -8,6 +8,8 @@ import com.ProgettoIng.FedericoIoan.repository.UserRepository;
 import com.ProgettoIng.FedericoIoan.service.IService.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -27,7 +29,15 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         User receiver = userRepository.findById(receiverId)
                 .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
-        return chatMessageRepository.findChatMessagesBySenderAndReceiver(sender, receiver);
+        List<ChatMessage> sendedMessages = chatMessageRepository.findChatMessagesBySenderAndReceiver(sender, receiver);
+
+        List<ChatMessage> receivedMessages = chatMessageRepository.findChatMessagesBySenderAndReceiver(receiver, sender);
+
+        sendedMessages.addAll(receivedMessages);
+
+        sendedMessages.sort(Comparator.comparing(ChatMessage::getDateInsert));
+
+        return sendedMessages;
     }
 
     public ChatMessage findChatMessage(Long id) {
