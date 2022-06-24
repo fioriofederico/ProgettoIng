@@ -77,6 +77,7 @@ public class AssignmentController {
                     .header(HttpHeaders.CONTENT_DISPOSITION,
                             "attachment; filename=\"" + assignmentDetails.getName() + "\"")
                     .body(attachment);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -88,6 +89,7 @@ public class AssignmentController {
         try {
             Assignment assignment = assignmentService.deleteAssignment(id);
             return ResponseEntity.ok(assignment);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -99,6 +101,7 @@ public class AssignmentController {
         try {
             Assignment assignment = assignmentService.scoreAssignment(id, score);
             return ResponseEntity.ok(assignment);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
