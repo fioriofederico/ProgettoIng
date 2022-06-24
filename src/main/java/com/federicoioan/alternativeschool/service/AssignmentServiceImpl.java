@@ -94,6 +94,18 @@ public class AssignmentServiceImpl implements AssignmentService {
         return assignmentRepository.findAllByDeliveryFolder(deliveryFolder);
     }
 
+    public List<Assignment> findStudentAssignments(Long studentId, Long deliveryFolderId) {
+        // Get delivery folder
+        DeliveryFolder deliveryFolder = deliveryFolderRepository.findById(deliveryFolderId)
+                .orElseThrow(() -> new RuntimeException("Delivery folder not found"));
+
+        // Get student
+        User student = userRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        return assignmentRepository.findAllByDeliveryFolderAndStudent(deliveryFolder, student);
+    }
+
     public Assignment findAssignment(Long id) {
         return assignmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Assignment not found"));

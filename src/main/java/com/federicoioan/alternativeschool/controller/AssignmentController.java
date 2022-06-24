@@ -1,6 +1,7 @@
 package com.federicoioan.alternativeschool.controller;
 
 import com.federicoioan.alternativeschool.model.Assignment;
+import com.federicoioan.alternativeschool.model.Role;
 import com.federicoioan.alternativeschool.model.User;
 import com.federicoioan.alternativeschool.model.dto.ScoreDto;
 import com.federicoioan.alternativeschool.service.AssignmentServiceImpl;
@@ -43,11 +44,24 @@ public class AssignmentController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('TUTOR') or hasRole('ADMIN')")
     public ResponseEntity<?> getAllAssignments(@PathVariable Long folderId) {
         try {
-            List<Assignment> assignments = assignmentService.findAllAssignments(folderId);
+
+            User user = userService.getUserWithAuthorities()
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            Role role = user.getRoles().iterator().next();
+            String roleName = role.getName().name();
+
+            List<Assignment> assignments;
+
+            if (roleName.equals("ROLE_STUDENT"))
+                assignments = assignmentService.findStudentAssignments(folderId, user.getId());
+            else
+                assignments = assignmentService.findAllAssignments(folderId);
+
             return ResponseEntity.ok(assignments);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

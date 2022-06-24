@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -33,7 +32,6 @@ public class Course {
 	@OneToMany(mappedBy = "course")
 	@JsonIgnore
 	Set<CourseEnrollment> enrolledUsers;
-
 
 	@Formula("(SELECT AVG(course_enrollments.rating) FROM course_enrollments WHERE course_enrollments.course_id = id and course_enrollments.rating != 0)")
 	private Float averageRating;
