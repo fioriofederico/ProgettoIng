@@ -1,115 +1,38 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
-        body {
-            font-family: Roboto;
+        h1{
+            color: brown;
         }
-
-        .certificate-container {
-            padding: 50px;
-            width: 1024px;
+        .quotation {
+            width: 100%;
         }
-
-        .certificate {
-            border: 20px solid #02070a;
-            padding: 25px;
-            height: 600px;
-            position: relative;
+        .quotation, .quotation th, .quotation td {
+            border: 1px solid brown;
+            border-collapse: collapse;
         }
-
-
-
-        .certificate-header>.logo {
-            width: 80px;
-            height: 80px;
-        }
-
-        .certificate-title {
-            text-align: center;
-        }
-
-        .certificate-body {
-            text-align: center;
-        }
-
-        h1 {
-
-            font-weight: 400;
-            font-size: 48px;
-            color: #02070a;
-        }
-
-        .student-name {
-            font-size: 32px;
-        }
-
-        .certificate-content {
-            margin: 0 auto;
-            width: 750px;
-        }
-
-        .about-certificate {
-            width: 600px;
-            margin: 0 auto;
-        }
-
-        .topic-description {
-
-            text-align: center;
-        }
-        .certificate-footer {
-            margin-top: 100px;
+        .quotation th {
+            background-color: brown;
+            color: white;
         }
     </style>
 </head>
-
 <body>
-<div class="certificate-container">
-    <div class="certificate">
-        <div class="water-mark-overlay"></div>
-        <div class="certificate-header">
-            <img src="https://github.com/fioriofederico/AlternativeSchool/blob/main/public/favicon.png?raw=true" class="logo" alt="">
-        </div>
-        <div class="certificate-body">
+<h1>Certificate</h1>
+<br />
 
-            <p class="certificate-title"><strong>ALTERNATIVE SCHOOL FOR BUSINNES</strong>
-            </p>
-            <h1>Certifica che lo Studente</h1>
-            <p class="student-name" th:text="${student.name} + ' '+${student.surname} "></p>
-            <div class="certificate-content">
-                <div class="about-certificate">
-                    <p>
-                        Ha completato con successo il corso:
-                    <p th:text="${course.name}"> </p>
-                    </p>
-                </div>
-            </div>
-            <div class="certificate-footer text-muted">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p th:text="'Il Docente:'+ ${course.owner}"></p>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-6 ">
-                                <p>
-                                    Accreditato da Federico Fiorio, Ioan Corrias
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p>
-                                    Approvata dal Politecnico di Milano
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<table class="quotation">
+    <tr>
+        <th>Course name</th>
+        <th>User Name</th>
+        <th>User Surname</th>
+    </tr>
+    <tr>
+        <td th:text="${course.name}"></td>
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.surname}"></td>
+    </tr>
+</table>
 </body>
-
 </html>
