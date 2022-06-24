@@ -1,14 +1,15 @@
 package com.federicoioan.alternativeschool.service;
 
-import com.federicoioan.alternativeschool.model.dto.NewPasswordDto;
-import com.federicoioan.alternativeschool.utils.SecurityUtils;
 import com.federicoioan.alternativeschool.model.User;
+import com.federicoioan.alternativeschool.model.dto.NewPasswordDto;
 import com.federicoioan.alternativeschool.repository.UserRepository;
 import com.federicoioan.alternativeschool.service.IService.UserService;
+import com.federicoioan.alternativeschool.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 

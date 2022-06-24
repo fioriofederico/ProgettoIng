@@ -11,6 +11,7 @@ import com.federicoioan.alternativeschool.repository.UserRepository;
 import com.federicoioan.alternativeschool.service.IService.CourseEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 

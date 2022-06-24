@@ -1,8 +1,8 @@
 package com.federicoioan.alternativeschool.config;
 
+import com.federicoioan.alternativeschool.service.UserDetailsServiceImpl;
 import com.federicoioan.alternativeschool.utils.AuthEntryPointJwt;
 import com.federicoioan.alternativeschool.utils.AuthTokenFilter;
-import com.federicoioan.alternativeschool.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

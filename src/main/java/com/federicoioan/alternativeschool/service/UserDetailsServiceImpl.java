@@ -1,8 +1,8 @@
 package com.federicoioan.alternativeschool.service;
 
 import com.federicoioan.alternativeschool.model.User;
-import com.federicoioan.alternativeschool.utils.UserDetailsImpl;
 import com.federicoioan.alternativeschool.repository.UserRepository;
+import com.federicoioan.alternativeschool.utils.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

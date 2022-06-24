@@ -1,10 +1,11 @@
 package com.federicoioan.alternativeschool.model.dto;
 
-import com.federicoioan.alternativeschool.model.Role;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.federicoioan.alternativeschool.model.Role;
 import lombok.Data;
+
 import java.util.Set;
 
 

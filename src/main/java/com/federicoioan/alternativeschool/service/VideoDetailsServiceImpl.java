@@ -1,14 +1,17 @@
 package com.federicoioan.alternativeschool.service;
 
+import com.clickntap.vimeo.Vimeo;
+import com.clickntap.vimeo.VimeoException;
+import com.clickntap.vimeo.VimeoResponse;
 import com.federicoioan.alternativeschool.model.CourseModule;
 import com.federicoioan.alternativeschool.model.VideoDetails;
+import com.federicoioan.alternativeschool.repository.CourseModuleRepository;
 import com.federicoioan.alternativeschool.repository.VideoDetailsRepository;
+import com.federicoioan.alternativeschool.service.IService.VideoDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.federicoioan.alternativeschool.repository.CourseModuleRepository;
-import com.federicoioan.alternativeschool.service.IService.VideoDetailsService;
 import org.springframework.web.multipart.MultipartFile;
-import com.clickntap.vimeo.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
